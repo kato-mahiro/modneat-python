@@ -16,3 +16,4 @@ __pycache__/
 *stats*.dat*
 out/
 *.svg
+.ipynb_checkpoints/
