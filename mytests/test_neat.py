@@ -126,7 +126,7 @@ if __name__ == '__main__':
     # Determine path to configuration file. This path manipulation is
     # here so that the script will run successfully regardless of the
     # current working directory.
-    config_path = os.path.join(local_dir, './test_neat_config.ini')
+    config_path = os.path.join(local_dir, 'config.ini')
 
     # Clean results of previous run if any or init the ouput directory
     clean_output()
