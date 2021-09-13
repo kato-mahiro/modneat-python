@@ -94,6 +94,15 @@ class DefaultNodeGene(BaseGene):
             d += 1.0
         return d * config.compatibility_weight_coefficient
 
+class ModNodeGene(DefaultNodeGene):
+    _gene_attributes = [FloatAttribute('bias'),
+                        FloatAttribute('response'),
+                        StringAttribute('activation', options='sigmoid'),
+                        StringAttribute('aggregation', options='sum'),
+                        BoolAttribute('modulatory', default='random')
+                        ]
+
+
 
 # TODO: Do an ablation study to determine whether the enabled setting is
 # important--presumably mutations that set the weight to near zero could
