@@ -10,7 +10,7 @@ import sys
 from modneat.activations import ActivationFunctionSet
 from modneat.aggregations import AggregationFunctionSet
 from modneat.config import ConfigParameter, write_pretty_params
-from modneat.genes import DefaultConnectionGene, DefaultNodeGene, ModNodeGene
+from modneat.genes import DefaultConnectionGene, DefaultNodeGene, ExHebbConnectionGene, ModNodeGene
 from modneat.graphs import creates_cycle
 
 
@@ -574,4 +574,8 @@ class ModGenome(DefaultGenome):
         return DefaultGenomeConfig(param_dict)
 
 class ExModGenome(DefaultGenome):
-    pass
+    @classmethod
+    def parse_config(cls, param_dict):
+        param_dict['node_gene_type'] = ModNodeGene
+        param_dict['connection_gene_type'] = ExHebbConnectionGene
+        return DefaultGenomeConfig(param_dict)
