@@ -74,7 +74,7 @@ def run_experiment(config_file):
                     configuration
     """
     # Load configuration.
-    config = modneat.Config(modneat.DefaultGenome, modneat.DefaultReproduction,
+    config = modneat.Config(modneat.ModGenome, modneat.DefaultReproduction,
                          modneat.DefaultSpeciesSet, modneat.DefaultStagnation,
                          config_file)
 
@@ -126,7 +126,7 @@ if __name__ == '__main__':
     # Determine path to configuration file. This path manipulation is
     # here so that the script will run successfully regardless of the
     # current working directory.
-    config_path = os.path.join(local_dir, 'config.ini')
+    config_path = os.path.join(local_dir, 'modgenome_config.ini')
 
     # Clean results of previous run if any or init the ouput directory
     clean_output()
