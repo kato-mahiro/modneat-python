@@ -17,3 +17,5 @@ __pycache__/
 out/
 *.svg
 .ipynb_checkpoints/
+.DS_Store
+
