@@ -133,3 +133,17 @@ class DefaultConnectionGene(BaseGene):
             d += 1.0
         return d * config.compatibility_weight_coefficient
 
+class ExHebbConnectionGene(DefaultConnectionGene):
+    _gene_attributes = [FloatAttribute('weight'),
+                        BoolAttribute('enabled'),
+                        FloatAttribute('a'),
+                        FloatAttribute('b'),
+                        FloatAttribute('c'),
+                        FloatAttribute('d')]
+
+    def distance(self, other, config):
+        d = abs(self.weight - other.weight)
+        d += (abs(self.a - other.a) + abs(self.b - other.b) + abs(self.c - other.c) + abs(self.d - other.d)) / 4
+        if self.enabled != other.enabled:
+            d += 1.0
+        return d * config.compatibility_weight_coefficient
