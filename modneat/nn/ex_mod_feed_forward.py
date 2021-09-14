@@ -19,7 +19,7 @@ class ExModFeedForwardNetwork(object):
 
         for node, modulatory, act_func, agg_func, bias, response, links in self.node_evals:
             node_inputs = []
-            for i, w in links:
+            for i, w, a, b, c, d in links:
                 node_inputs.append(self.values[i] * w)
             s = agg_func(node_inputs)
 
@@ -33,12 +33,12 @@ class ExModFeedForwardNetwork(object):
         # Caliculate modulated_values of each node
         for node, modulatory, act_func, agg_func, bias, response, links in self.node_evals:
             self.modulated_values[node] = 0.0 
-            for i, w in links:
+            for i, w, a, b, c, d in links:
                 self.modulated_values[node] += self.modulate_values[i] * w
 
         # Update weight value using modulated value
         for node, modulatory, act_func, agg_func, bias, response, links in self.node_evals:
-            for i, w in links:
+            for i, w, a, b, c, d in links:
                 update_val = self.modulated_values[node] * self.values[node] * self.values[i]
                 self.weight_change(i, node, update_val)
 
@@ -51,7 +51,7 @@ class ExModFeedForwardNetwork(object):
         for _output_node, modulatory, act_func, agg_func, bias, response, links in self.node_evals:
             node_loop_counter += 1
             connection_loop_counter = -1
-            for _input_node, _weight in links:
+            for _input_node, _weight, a, b, c, d in links:
                 connection_loop_counter += 1
                 if(input_node == _input_node and output_node == _output_node):
                     listed_node_and_weight = list(self.node_evals[node_loop_counter][6][connection_loop_counter])
@@ -78,7 +78,7 @@ class ExModFeedForwardNetwork(object):
                     inode, onode = conn_key
                     if onode == node:
                         cg = genome.connections[conn_key]
-                        inputs.append((inode, cg.weight))
+                        inputs.append((inode, cg.weight, cg.a, cg.b, cg.c, cg.d))
                         node_expr.append("v[{}] * {:.7e}".format(inode, cg.weight))
 
                 ng = genome.nodes[node]
