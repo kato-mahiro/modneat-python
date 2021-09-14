@@ -60,7 +60,7 @@ def eval_genomes(genomes, config):
     """
     for genome_id, genome in genomes:
         genome.fitness = 4.0
-        net = modneat.nn.FeedForwardNetwork.create(genome, config)
+        net = modneat.nn.ModFeedForwardNetwork.create(genome, config)
         genome.fitness = eval_fitness(net)
 
 def run_experiment(config_file):
@@ -95,7 +95,7 @@ def run_experiment(config_file):
 
     # Show output of the most fit genome against training data.
     print('\nOutput:')
-    net = modneat.nn.FeedForwardNetwork.create(best_genome, config)
+    net = modneat.nn.ModFeedForwardNetwork.create(best_genome, config)
     for xi, xo in zip(xor_inputs, xor_outputs):
         output = net.activate(xi)
         print("input {!r}, expected output {!r}, got {!r}".format(xi, xo, output))
