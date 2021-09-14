@@ -74,7 +74,7 @@ def run_experiment(config_file):
                     configuration
     """
     # Load configuration.
-    config = modneat.Config(modneat.ExHebbConnectionGene, modneat.DefaultReproduction,
+    config = modneat.Config(modneat.ExModGenome, modneat.DefaultReproduction,
                          modneat.DefaultSpeciesSet, modneat.DefaultStagnation,
                          config_file)
 
