@@ -153,7 +153,7 @@ class DefaultGenome(object):
 
     @classmethod
     def parse_config(cls, param_dict):
-        param_dict['node_gene_type'] = ModNodeGene
+        param_dict['node_gene_type'] = DefaultNodeGene
         param_dict['connection_gene_type'] = DefaultConnectionGene
         return DefaultGenomeConfig(param_dict)
 
@@ -565,3 +565,13 @@ class DefaultGenome(object):
         for input_id, output_id in all_connections[:num_to_add]:
             connection = self.create_connection(config, input_id, output_id)
             self.connections[connection.key] = connection
+
+class ModGenome(DefaultGenome):
+    @classmethod
+    def parse_config(cls, param_dict):
+        param_dict['node_gene_type'] = ModNodeGene
+        param_dict['connection_gene_type'] = DefaultConnectionGene
+        return DefaultGenomeConfig(param_dict)
+
+class ExModGenome(DefaultGenome):
+    pass
