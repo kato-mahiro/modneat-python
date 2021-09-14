@@ -572,6 +572,13 @@ class ModGenome(DefaultGenome):
         param_dict['node_gene_type'] = ModNodeGene
         param_dict['connection_gene_type'] = DefaultConnectionGene
         return DefaultGenomeConfig(param_dict)
+        
+class ExGenome(DefaultGenome):
+    @classmethod
+    def parse_config(cls, param_dict):
+        param_dict['node_gene_type'] = DefaultNodeGene
+        param_dict['connection_gene_type'] = ExHebbConnectionGene
+        return DefaultGenomeConfig(param_dict)
 
 class ExModGenome(DefaultGenome):
     @classmethod

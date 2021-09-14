@@ -6,7 +6,7 @@ import modneat.distributed as distributed
 
 from modneat.config import Config
 from modneat.population import Population, CompleteExtinctionException
-from modneat.genome import DefaultGenome, ModGenome, ExModGenome
+from modneat.genome import DefaultGenome, ModGenome, ExModGenome, ExGenome
 from modneat.reproduction import DefaultReproduction
 from modneat.stagnation import DefaultStagnation
 from modneat.reporting import StdOutReporter
