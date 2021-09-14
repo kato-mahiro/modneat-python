@@ -39,7 +39,13 @@ class ExModFeedForwardNetwork(object):
         # Update weight value using modulated value
         for node, modulatory, act_func, agg_func, bias, response, links in self.node_evals:
             for i, w, a, b, c, d in links:
-                update_val = self.modulated_values[node] * self.values[node] * self.values[i]
+                update_val = self.modulated_values[node] * \
+                             (
+                                a * (self.values[node] * self.values[i]) + 
+                                b * (self.values[node]) +  
+                                c * (self.values[i]) + 
+                                d 
+                             )
                 self.weight_change(i, node, update_val)
 
         return [self.values[i] for i in self.output_nodes]
