@@ -143,7 +143,12 @@ class ExHebbConnectionGene(DefaultConnectionGene):
 
     def distance(self, other, config):
         d = abs(self.weight - other.weight)
-        d += (abs(self.a - other.a) + abs(self.b - other.b) + abs(self.c - other.c) + abs(self.d - other.d)) / 4
+
+        d2 = (abs(self.a - other.a) + abs(self.b - other.b) + abs(self.c - other.c) + abs(self.d - other.d)) / 4
         if self.enabled != other.enabled:
             d += 1.0
-        return d * config.compatibility_weight_coefficient
+            d2 += 1.0
+
+        return (d * config.compatibility_weight_coefficient + \
+                d2 * config.compatibility_evoparam_coefficient) \
+             / 2.0
