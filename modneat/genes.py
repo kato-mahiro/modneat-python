@@ -151,4 +151,4 @@ class ExHebbConnectionGene(DefaultConnectionGene):
 
         return (d * config.compatibility_weight_coefficient + \
                 d2 * config.compatibility_evoparam_coefficient) \
-             / 2.0
+                / 2.0
