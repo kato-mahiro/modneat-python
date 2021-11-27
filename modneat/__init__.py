@@ -10,6 +10,7 @@ from modneat.genome import DefaultGenome, ModGenome, ExModGenome, ExGenome
 from modneat.reproduction import DefaultReproduction
 from modneat.stagnation import DefaultStagnation
 from modneat.reporting import StdOutReporter
+from modneat.reporting import FileOutReporter
 from modneat.species import DefaultSpeciesSet
 from modneat.statistics import StatisticsReporter
 from modneat.parallel import ParallelEvaluator
