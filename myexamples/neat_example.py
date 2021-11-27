@@ -82,7 +82,7 @@ def run_experiment(config_file):
     p = modneat.Population(config)
 
     # Add a stdout reporter to show progress in the terminal.
-    p.add_reporter(modneat.StdOutReporter(True))
+    p.add_reporter(modneat.FileOutReporter(True, './neat_result.txt'))
     stats = modneat.StatisticsReporter()
     p.add_reporter(stats)
     p.add_reporter(modneat.Checkpointer(5, filename_prefix='out/neat-checkpoint-'))
