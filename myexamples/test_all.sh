@@ -1,5 +1,14 @@
 #!/bin/bash
 
+python bare_neat.py > /dev/null
+if [ $? -ne 0 ]; then
+    echo "=========================================="
+    echo " 😡 Oops... run bare_neat.py FAILED"
+    echo "=========================================="
+    exit 1
+fi
+echo "😁 bare_neat.py is OK"
+
 python neat_example.py > /dev/null
 if [ $? -ne 0 ]; then
     echo "=========================================="
@@ -35,6 +44,7 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 echo "😁 exmod_example.py is OK"
+
 
 echo "======================================="
 echo " 😁😁😁 ALL TESTS ARE PASSED !!  "
