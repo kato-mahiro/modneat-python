@@ -8,6 +8,13 @@ class ExFeedForwardNetwork(object):
         self.node_evals = node_evals
         self.values = dict((key, 0.0) for key in inputs + outputs)
 
+        self.global_eta = 0.0
+        for node, act_func, agg_func, bias, response, links in self.node_evals:
+            node_inputs = []
+            for i, w, eta in links:
+                self.global_eta += eta
+            self.global_eta /= len(self.node_evals)
+
     def activate(self, inputs):
         if len(self.input_nodes) != len(inputs):
             raise RuntimeError("Expected {0:n} inputs, got {1:n}".format(len(self.input_nodes), len(inputs)))
@@ -67,7 +74,7 @@ class ExFeedForwardNetwork(object):
                     inode, onode = conn_key
                     if onode == node:
                         cg = genome.connections[conn_key]
-                        inputs.append((inode, cg.weight, cg.a, cg.b, cg.c, cg.d))
+                        inputs.append((inode, cg.weight, cg.eta))
                         node_expr.append("v[{}] * {:.7e}".format(inode, cg.weight))
 
                 ng = genome.nodes[node]
