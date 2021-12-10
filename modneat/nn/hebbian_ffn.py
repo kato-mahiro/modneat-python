@@ -24,18 +24,15 @@ class HebbianFNN(object):
 
         for node, act_func, agg_func, bias, response, links in self.node_evals:
             node_inputs = []
-            for i, w, a, b, c, d in links:
+            for i, w, _eta in links:
                 node_inputs.append(self.values[i] * w)
             s = agg_func(node_inputs)
             self.values[node] = act_func(bias + response * s)
 
         for node, act_func, agg_func, bias, response, links in self.node_evals:
             node_inputs = []
-            for i, w, a, b, c, d in links:
-                update_val =  a * self.values[i] * self.values[node] + \
-                              b * self.values[i] +  \
-                              c * self.values[node] + \
-                              d
+            for i, w, _eta in links:
+                update_val = self.global_eta * self.values[i] * self.values[node]
                 self.weight_change(i, node, update_val)
 
         return [self.values[i] for i in self.output_nodes]
@@ -47,7 +44,7 @@ class HebbianFNN(object):
         for _output_node, act_func, agg_func, bias, response, links in self.node_evals:
             node_loop_counter += 1
             connection_loop_counter = -1
-            for _input_node, _weight, a, b, c, d in links:
+            for _input_node, _weight, _eta in links:
                 connection_loop_counter += 1
                 if(input_node == _input_node and output_node == _output_node):
                     listed_node_and_weight = list(self.node_evals[node_loop_counter][5][connection_loop_counter])
