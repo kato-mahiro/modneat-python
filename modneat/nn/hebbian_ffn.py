@@ -1,7 +1,7 @@
 from modneat.graphs import feed_forward_layers
 
 
-class ExFeedForwardNetwork(object):
+class HebbianFNN(object):
     def __init__(self, inputs, outputs, node_evals):
         self.input_nodes = inputs
         self.output_nodes = outputs
@@ -82,4 +82,4 @@ class ExFeedForwardNetwork(object):
                 activation_function = config.genome_config.activation_defs.get(ng.activation)
                 node_evals.append((node, activation_function, aggregation_function, ng.bias, ng.response, inputs))
 
-        return ExFeedForwardNetwork(config.genome_config.input_keys, config.genome_config.output_keys, node_evals)
+        return HebbianFNN(config.genome_config.input_keys, config.genome_config.output_keys, node_evals)
