@@ -9,11 +9,13 @@ class HebbianFNN(object):
         self.values = dict((key, 0.0) for key in inputs + outputs)
 
         self.global_eta = 0.0
+        node_num = 0
         for node, act_func, agg_func, bias, response, links in self.node_evals:
             node_inputs = []
             for i, w, eta in links:
                 self.global_eta += eta
-            self.global_eta /= len(self.node_evals)
+                node_num += 1
+            self.global_eta /= node_num
 
     def activate(self, inputs):
         if len(self.input_nodes) != len(inputs):
