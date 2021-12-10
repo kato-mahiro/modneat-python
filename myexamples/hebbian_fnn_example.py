@@ -60,7 +60,7 @@ def eval_genomes(genomes, config):
     """
     for genome_id, genome in genomes:
         genome.fitness = 4.0
-        net = modneat.nn.ExFeedForwardNetwork.create(genome, config)
+        net = modneat.nn.HebbianFNN.create(genome, config)
         genome.fitness = eval_fitness(net)
 
 def run_experiment(config_file):
@@ -74,7 +74,7 @@ def run_experiment(config_file):
                     configuration
     """
     # Load configuration.
-    config = modneat.Config(modneat.HebbianRuledConnectionGene, modneat.DefaultReproduction,
+    config = modneat.Config(modneat.HebbianRuledGenome, modneat.DefaultReproduction,
                          modneat.DefaultSpeciesSet, modneat.DefaultStagnation,
                          config_file)
 
@@ -83,26 +83,27 @@ def run_experiment(config_file):
 
     # Add a stdout reporter to show progress in the terminal.
     p.add_reporter(modneat.FileOutReporter(True, './hebbian_fnn_result.txt'))
-    p.add_reporter(modneat.StdOutReporter)
+    p.add_reporter(modneat.StdOutReporter(True))
     stats = modneat.StatisticsReporter()
     p.add_reporter(stats)
     p.add_reporter(modneat.Checkpointer(5, filename_prefix='out/modneat-checkpoint-'))
 
     # Run for up to 300 generations.
-    best_genome = p.run(eval_genomes, 30)
+    best_genome = p.run(eval_genomes, 300)
 
     # Display the best genome among generations.
     print('\nBest genome:\n{!s}'.format(best_genome))
 
     # Show output of the most fit genome against training data.
     print('\nOutput:')
-    net = modneat.nn.ExFeedForwardNetwork.create(best_genome, config)
+    net = modneat.nn.HebbianFNN.create(best_genome, config)
     for xi, xo in zip(xor_inputs, xor_outputs):
         output = net.activate(xi)
         print("input {!r}, expected output {!r}, got {!r}".format(xi, xo, output))
 
     # Check if the best genome is an adequate XOR solver
     best_genome_fitness = eval_fitness(net)
+    print('*** best_genome_fitness is : ', best_genome_fitness)
     if best_genome_fitness > config.fitness_threshold:
         print("\n\nSUCCESS: The XOR problem solver found!!!")
     else:
@@ -127,7 +128,7 @@ if __name__ == '__main__':
     # Determine path to configuration file. This path manipulation is
     # here so that the script will run successfully regardless of the
     # current working directory.
-    config_path = os.path.join(local_dir, './config/exgenome_config.ini')
+    config_path = os.path.join(local_dir, './config/hebbiangenome_config.ini')
 
     # Clean results of previous run if any or init the ouput directory
     clean_output()
