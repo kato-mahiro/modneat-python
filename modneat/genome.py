@@ -180,6 +180,9 @@ class DefaultGenome(object):
     def configure_new(self, config):
         """Configure a new genome based on the given configuration."""
 
+        #Create individual param genes.
+        self.individual_params[0] = self.create_individual_params(config, 0)
+
         # Create node genes for the output pins.
         for node_key in config.output_keys:
             self.nodes[node_key] = self.create_node(config, node_key)
@@ -478,6 +481,13 @@ class DefaultGenome(object):
         connection = config.connection_gene_type((input_id, output_id))
         connection.init_attributes(config)
         return connection
+
+    @staticmethod
+    def create_individual_params(config, param_id):
+        param = config.individual_gene_type(param_id)
+        param.init_attributes(config)
+        return param
+
 
     def connect_fs_neat_nohidden(self, config):
         """
