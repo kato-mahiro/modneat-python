@@ -47,6 +47,8 @@ class DefaultGenomeConfig(object):
         self._params += self.node_gene_type.get_config_params()
         self.connection_gene_type = params['connection_gene_type']
         self._params += self.connection_gene_type.get_config_params()
+        self.individual_gene_type = params['individual_gene_type']
+        self._params += self.individual_gene_type.get_config_params()
 
         # Use the configuration data to interpret the supplied parameters.
         for p in self._params:
@@ -156,6 +158,7 @@ class DefaultGenome(object):
     def parse_config(cls, param_dict):
         param_dict['node_gene_type'] = DefaultNodeGene
         param_dict['connection_gene_type'] = DefaultConnectionGene
+        param_dict['individual_gene_type'] = DefaultIndividualGene
         return DefaultGenomeConfig(param_dict)
 
     @classmethod
@@ -167,6 +170,7 @@ class DefaultGenome(object):
         self.key = key
 
         # (gene_key, gene) pairs for gene sets.
+        self.individual_params = {}
         self.connections = {}
         self.nodes = {}
 
