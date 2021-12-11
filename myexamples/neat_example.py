@@ -77,6 +77,7 @@ def run_experiment(config_file):
     config = modneat.Config(modneat.DefaultGenome, modneat.DefaultReproduction,
                          modneat.DefaultSpeciesSet, modneat.DefaultStagnation,
                          config_file)
+    import pdb; pdb.set_trace()
 
     # Create the population, which is the top-level object for a NEAT run.
     p = modneat.Population(config)
@@ -91,6 +92,7 @@ def run_experiment(config_file):
     best_genome = p.run(eval_genomes, 100)
 
     # Display the best genome among generations.
+    import pdb; pdb.set_trace()
     print('\nBest genome:\n{!s}'.format(best_genome))
 
     # Show output of the most fit genome against training data.
