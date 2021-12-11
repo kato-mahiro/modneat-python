@@ -72,6 +72,12 @@ class BaseGene(object):
 
         return new_gene
 
+class DefaultIndividualGene(BaseGene):
+    __gene_attributes = []
+
+    def distance(self, other, config):
+        return 0.0
+
 
 # TODO: Should these be in the nn module?  iznn and ctrnn can have additional attributes.
 
