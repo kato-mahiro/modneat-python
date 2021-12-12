@@ -81,7 +81,17 @@ class DefaultIndividualGene(BaseGene):
                         mutate_power = 0.1,
                         max_value = 1.0,
                         min_value = -1.0
-                        )]
+                        ),
+                        FloatAttribute('ind_example_val2',
+                        init_mean = 0.0,
+                        init_stdev = 1.0,
+                        replace_rate = 0.1,
+                        mutate_rate = 0.1,
+                        mutate_power = 0.1,
+                        max_value = 1.0,
+                        min_value = -1.0
+                        )
+                        ]
 
     def __init__(self, key):
         assert isinstance(key, int), "DefaultIndividualGene key must be an int, not {!r}".format(key)
