@@ -14,9 +14,13 @@ import modneat
 # The helper used to visualize experiment results
 import visualize
 
+NETWORK_TYPE = modneat.nn.FeedForwardNetwork
+GENOME_TYPE = modneat.DefaultGenome
 
 # The current working directory
 local_dir = os.path.dirname(__file__)
+CONFIG_PATH = os.path.join(local_dir, './config/config.ini')
+
 # The directory to store outputs
 out_dir = os.path.join(local_dir, 'out')
 
@@ -60,7 +64,7 @@ def eval_genomes(genomes, config):
     """
     for genome_id, genome in genomes:
         genome.fitness = 4.0
-        net = modneat.nn.FeedForwardNetwork.create(genome, config)
+        net = NETWORK_TYPE.create(genome, config)
         genome.fitness = eval_fitness(net)
 
 def run_experiment(config_file):
@@ -74,7 +78,7 @@ def run_experiment(config_file):
                     configuration
     """
     # Load configuration.
-    config = modneat.Config(modneat.DefaultGenome, modneat.DefaultReproduction,
+    config = modneat.Config(GENOME_TYPE, modneat.DefaultReproduction,
                          modneat.DefaultSpeciesSet, modneat.DefaultStagnation,
                          config_file)
 
@@ -95,7 +99,7 @@ def run_experiment(config_file):
 
     # Show output of the most fit genome against training data.
     print('\nOutput:')
-    net = modneat.nn.FeedForwardNetwork.create(best_genome, config)
+    net = NETWORK_TYPE.create(best_genome, config)
     for xi, xo in zip(xor_inputs, xor_outputs):
         output = net.activate(xi)
         print("input {!r}, expected output {!r}, got {!r}".format(xi, xo, output))
@@ -126,10 +130,9 @@ if __name__ == '__main__':
     # Determine path to configuration file. This path manipulation is
     # here so that the script will run successfully regardless of the
     # current working directory.
-    config_path = os.path.join(local_dir, './config/config.ini')
 
     # Clean results of previous run if any or init the ouput directory
     clean_output()
 
     # Run the experiment
-    run_experiment(config_path)
+    run_experiment(CONFIG_PATH)
