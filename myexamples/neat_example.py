@@ -13,9 +13,12 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 import modneat
 # The helper used to visualize experiment results
 import visualize
+import task
 
 NETWORK_TYPE = modneat.nn.FeedForwardNetwork
 GENOME_TYPE = modneat.DefaultGenome
+
+TASK = task.xor()
 
 # The current working directory
 local_dir = os.path.dirname(__file__)
@@ -23,49 +26,6 @@ CONFIG_PATH = os.path.join(local_dir, './config/config.ini')
 
 # The directory to store outputs
 out_dir = os.path.join(local_dir, 'out')
-
-# The XOR inputs and expected corresponding outputs for fitness evaluation
-xor_inputs  = [(1.0, 1.0), (1.0, 1.0), (1.0, 1.0), (1.0, 1.0)]
-xor_outputs = [   (1.0,),     (0.66,),     (0.33,),     (0.0,)]
-
-def eval_fitness(net):
-    """
-    Evaluates fitness of the genome that was used to generate 
-    provided net
-    Arguments:
-        net: The feed-forward neural network generated from genome
-    Returns:
-        The fitness score - the higher score the means the better 
-        fit organism. Maximal score: 16.0
-    """
-    error_sum = 0.0
-    for xi, xo in zip(xor_inputs, xor_outputs):
-        output = net.activate(xi)
-        error_sum += abs(output[0] - xo[0])
-    # Calculate amplified fitness
-    fitness = (4 - error_sum) ** 2
-    return fitness
-
-def eval_genomes(genomes, config):
-    """
-    The function to evaluate the fitness of each genome in 
-    the genomes list. 
-    The provided configuration is used to create feed-forward 
-    neural network from each genome and after that created
-    the neural network evaluated in its ability to solve
-    XOR problem. As a result of this function execution, the
-    the fitness score of each genome updated to the newly
-    evaluated one.
-    Arguments:
-        genomes: The list of genomes from population in the 
-                current generation
-        config: The configuration settings with algorithm
-                hyper-parameters
-    """
-    for genome_id, genome in genomes:
-        genome.fitness = 4.0
-        net = NETWORK_TYPE.create(genome, config)
-        genome.fitness = eval_fitness(net)
 
 def run_experiment(config_file):
     """
@@ -92,7 +52,7 @@ def run_experiment(config_file):
     p.add_reporter(modneat.Checkpointer(5, filename_prefix='out/neat-checkpoint-'))
 
     # Run for up to 100 generations.
-    best_genome = p.run(eval_genomes, 100)
+    best_genome = p.run(TASK.eval_genomes, 100)
 
     # Display the best genome among generations.
     print('\nBest genome:\n{!s}'.format(best_genome))
