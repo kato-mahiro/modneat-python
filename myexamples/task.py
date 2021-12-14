@@ -1,4 +1,4 @@
-import visualize
+from modneat import visualize
 import os
 
 class xor:

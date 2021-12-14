@@ -12,7 +12,6 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 # The NEAT-Python library imports
 import modneat
 # The helper used to visualize experiment results
-import visualize
 import task
 
 NETWORK_TYPE = modneat.nn.FeedForwardNetwork
