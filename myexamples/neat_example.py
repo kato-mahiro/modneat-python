@@ -1,3 +1,4 @@
+import argparse
 import sys
 import os
 import shutil
@@ -9,17 +10,19 @@ import modneat
 # The helper used to visualize experiment results
 import task
 
-NETWORK_TYPE = modneat.nn.FeedForwardNetwork
-GENOME_TYPE = modneat.DefaultGenome
-
-TASK = task.xor(network_type = NETWORK_TYPE)
-
 # The current working directory
 local_dir = os.path.dirname(__file__)
-CONFIG_PATH = os.path.join(local_dir, './config/config.ini')
 
-# The directory to store outputs
-out_dir = os.path.join(local_dir, 'out')
+def create_parser():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--network_type', type=str, help='', default='FeedForwardNetwork')
+    parser.add_argument('--genome_type', type=str, help='', default='DefaultGenome')
+    parser.add_argument('--config_path', type=str, help='', default='./config/config.ini')
+    parser.add_argument('--savedir', type=str, help='', default='./results')
+    parser.add_argument('--task', type=str, help='', default='task.xor')
+
+    args = parser.parse_args()
+    return args
 
 def run_experiment(config_file):
     """
@@ -36,10 +39,10 @@ def run_experiment(config_file):
 
     # Add a stdout reporter to show progress in the terminal.
     p.add_reporter(modneat.StdOutReporter(True))
-    p.add_reporter(modneat.FileOutReporter(True, out_dir + '/neat_result.txt'))
+    p.add_reporter(modneat.FileOutReporter(True, out_dir + '/results.txt'))
     stats = modneat.StatisticsReporter()
     p.add_reporter(stats)
-    p.add_reporter(modneat.Checkpointer(5, filename_prefix='out/neat-checkpoint-'))
+    p.add_reporter(modneat.Checkpointer(5, filename_prefix= out_dir + '/checkpoints/checkpoint-'))
 
     # Run for up to 100 generations.
     best_genome = p.run(TASK.eval_genomes, 100)
@@ -53,9 +56,20 @@ def clean_output():
 
     # create the output directory
     os.makedirs(out_dir, exist_ok=False)
+    os.makedirs(out_dir + '/checkpoints', exist_ok=False)
 
 
 if __name__ == '__main__':
+    # Get args
+    args = create_parser()
+    NETWORK_TYPE = eval('modneat.nn.' + args.network_type)
+    GENOME_TYPE = eval('modneat.' + args.genome_type)
+    TASK = eval(args.task + '(network_type = NETWORK_TYPE)')
+    CONFIG_PATH = os.path.join(local_dir, args.config_path)
+
+    # The directory to store outputs
+    out_dir = os.path.join(local_dir, args.savedir, args.task + '_' + args.network_type)
+
     # Clean results of previous run if any or init the ouput directory
     clean_output()
 
