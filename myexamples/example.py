@@ -20,6 +20,7 @@ def create_parser():
     parser.add_argument('--config_path', type=str, help='', default='./config/config.ini')
     parser.add_argument('--savedir', type=str, help='', default='./results')
     parser.add_argument('--task', type=str, help='', default='task.xor')
+    parser.add_argument('--generation', type=int, help='', default=100)
     parser.add_argument('--run_id', type=int, help='', default=0)
     parser.add_argument('--memo', type=str, help='', default='')
 
@@ -51,8 +52,8 @@ def run_experiment(config_file):
     p.add_reporter(stats)
     p.add_reporter(modneat.Checkpointer(5, filename_prefix= out_dir + '/checkpoints/checkpoint-'))
 
-    # Run for up to 100 generations.
-    best_genome = p.run(TASK.eval_genomes, 100)
+    # Run for up to args.generations.
+    best_genome = p.run(TASK.eval_genomes, GENERATION)
     TASK.show_results(best_genome, config, stats, out_dir)
 
 
@@ -74,6 +75,7 @@ if __name__ == '__main__':
     TASK = eval(args.task + '(network_type = NETWORK_TYPE)')
     CONFIG_PATH = os.path.join(local_dir, args.config_path)
     MEMO = args.memo
+    GENERATION = args.generation
 
     # The directory to store outputs
     out_dir = os.path.join(local_dir, args.savedir, args.task + '_' + args.network_type + '_' + str(args.run_id))
