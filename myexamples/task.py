@@ -1,4 +1,5 @@
 import visualize
+import os
 
 class xor:
     # The XOR inputs and expected corresponding outputs for fitness evaluation
@@ -46,7 +47,7 @@ class xor:
             net = self.network_type.create(genome, config)
             genome.fitness = self.eval_fitness(net)
     
-    def show_best_results(self, best_genome, config, out_dir):
+    def show_best_results(self, best_genome, config, stats, out_dir):
         # Display the best genome among generations.
         print('\nBest genome:\n{!s}'.format(best_genome))
 

@@ -54,7 +54,7 @@ def run_experiment(config_file):
     # Run for up to 100 generations.
     best_genome = p.run(TASK.eval_genomes, 100)
 
-    TASK.show_best_results(best_genome, config, out_dir)
+    TASK.show_best_results(best_genome, config, stats, out_dir)
 
 
 def clean_output():

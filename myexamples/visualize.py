@@ -148,14 +148,20 @@ def draw_net(config, genome, view=False, filename=None, directory=None, node_nam
         if n in inputs or n in outputs:
             continue
 
-        if(genome.nodes[n].modulatory):
-            attrs = {'style': 'filled',
-                    'shape': 'box',
-                    'fillcolor': node_colors.get(n, 'white')}
-        else:
+        try:
+            if(genome.nodes[n].modulatory):
+                attrs = {'style': 'filled',
+                        'shape': 'box',
+                        'fillcolor': node_colors.get(n, 'white')}
+            else:
+                attrs = {'style': 'filled',
+                        'shape': 'circle',
+                        'fillcolor': node_colors.get(n, 'white')}
+        except:
             attrs = {'style': 'filled',
                     'shape': 'circle',
                     'fillcolor': node_colors.get(n, 'white')}
+
 
         dot.node(str(n), _attributes=attrs)
 
