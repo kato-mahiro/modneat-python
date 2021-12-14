@@ -18,7 +18,7 @@ import task
 NETWORK_TYPE = modneat.nn.FeedForwardNetwork
 GENOME_TYPE = modneat.DefaultGenome
 
-TASK = task.xor()
+TASK = task.xor(network_type = NETWORK_TYPE)
 
 # The current working directory
 local_dir = os.path.dirname(__file__)
@@ -54,28 +54,8 @@ def run_experiment(config_file):
     # Run for up to 100 generations.
     best_genome = p.run(TASK.eval_genomes, 100)
 
-    # Display the best genome among generations.
-    print('\nBest genome:\n{!s}'.format(best_genome))
+    TASK.show_best_results(best_genome, config, out_dir)
 
-    # Show output of the most fit genome against training data.
-    print('\nOutput:')
-    net = NETWORK_TYPE.create(best_genome, config)
-    for xi, xo in zip(xor_inputs, xor_outputs):
-        output = net.activate(xi)
-        print("input {!r}, expected output {!r}, got {!r}".format(xi, xo, output))
-
-    # Check if the best genome is an adequate XOR solver
-    best_genome_fitness = eval_fitness(net)
-    if best_genome_fitness > config.fitness_threshold:
-        print("\n\nSUCCESS: The XOR problem solver found!!!")
-    else:
-        print("\n\nFAILURE: Failed to find XOR problem solver!!!")
-
-    # Visualize the experiment results
-    node_names = {-1:'A', -2: 'B', 0:'A XOR B'}
-    visualize.draw_net(config, best_genome, False, node_names=node_names, directory=out_dir)
-    visualize.plot_stats(stats, ylog=False, view=False, filename=os.path.join(out_dir, 'avg_fitness.svg'))
-    visualize.plot_species(stats, view=False, filename=os.path.join(out_dir, 'speciation.svg'))
 
 def clean_output():
     if os.path.isdir(out_dir):
