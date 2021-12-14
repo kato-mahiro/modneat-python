@@ -20,6 +20,8 @@ def create_parser():
     parser.add_argument('--config_path', type=str, help='', default='./config/config.ini')
     parser.add_argument('--savedir', type=str, help='', default='./results')
     parser.add_argument('--task', type=str, help='', default='task.xor')
+    parser.add_argument('--run_id', type=int, help='', default=0)
+    parser.add_argument('--memo', type=str, help='', default='')
 
     args = parser.parse_args()
     return args
@@ -29,6 +31,11 @@ def run_experiment(config_file):
     Arguments:
         config_file: the path to the file with experiment configuration
     """
+    # Write memo
+    with open(out_dir + '/memo.txt', 'a') as f:
+        print(MEMO, file=f)
+    
+
     # Load configuration.
     config = modneat.Config(GENOME_TYPE, modneat.DefaultReproduction,
                          modneat.DefaultSpeciesSet, modneat.DefaultStagnation,
@@ -66,9 +73,10 @@ if __name__ == '__main__':
     GENOME_TYPE = eval('modneat.' + args.genome_type)
     TASK = eval(args.task + '(network_type = NETWORK_TYPE)')
     CONFIG_PATH = os.path.join(local_dir, args.config_path)
+    MEMO = args.memo
 
     # The directory to store outputs
-    out_dir = os.path.join(local_dir, args.savedir, args.task + '_' + args.network_type)
+    out_dir = os.path.join(local_dir, args.savedir, args.task + '_' + args.network_type + '_' + str(args.run_id))
 
     # Clean results of previous run if any or init the ouput directory
     clean_output()
