@@ -59,5 +59,12 @@ class xor:
         # Visualize the experiment results
         node_names = {-1:'A', -2: 'B', 0:'A XOR B'}
         visualize.draw_net(config, best_genome, False, node_names=node_names, directory=out_dir)
-        visualize.plot_stats(stats, ylog=False, view=False, filename=os.path.join(out_dir, 'avg_fitness.svg'))
-        visualize.plot_species(stats, view=False, filename=os.path.join(out_dir, 'speciation.svg'))
+        visualize.plot_stats(stats, ylog=False, view=False, filename=os.path.join(out_dir, 'avg_fitness.png'))
+        visualize.plot_species(stats, view=False, filename=os.path.join(out_dir, 'speciation.png'))
+
+class non_static(xor):
+    # The XOR inputs and expected corresponding outputs for fitness evaluation
+    def __init__(self, network_type):
+        self.network_type = network_type
+        self.xor_inputs  = [(1.0, 1.0), (1.0, 1.0), (1.0, 1.0), (1.0, 1.0)]
+        self.xor_outputs = [   (1.0,),     (0.66,),     (0.33,),     (0.0,)]
