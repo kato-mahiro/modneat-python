@@ -1,8 +1,3 @@
-#
-# This file provides source code of XOR experiment using on NEAT-Python library
-#
-
-# The Python standard library import
 import sys
 import os
 import shutil
@@ -28,13 +23,8 @@ out_dir = os.path.join(local_dir, 'out')
 
 def run_experiment(config_file):
     """
-    The function to run XOR experiment against hyper-parameters 
-    defined in the provided configuration file.
-    The winner genome will be rendered as a graph as well as the
-    important statistics of neuroevolution process execution.
     Arguments:
-        config_file: the path to the file with experiment 
-                    configuration
+        config_file: the path to the file with experiment configuration
     """
     # Load configuration.
     config = modneat.Config(GENOME_TYPE, modneat.DefaultReproduction,
@@ -45,15 +35,15 @@ def run_experiment(config_file):
     p = modneat.Population(config)
 
     # Add a stdout reporter to show progress in the terminal.
-    p.add_reporter(modneat.FileOutReporter(True, './neat_result.txt'))
+    p.add_reporter(modneat.StdOutReporter(True))
+    p.add_reporter(modneat.FileOutReporter(True, out_dir + '/neat_result.txt'))
     stats = modneat.StatisticsReporter()
     p.add_reporter(stats)
     p.add_reporter(modneat.Checkpointer(5, filename_prefix='out/neat-checkpoint-'))
 
     # Run for up to 100 generations.
     best_genome = p.run(TASK.eval_genomes, 100)
-
-    TASK.show_best_results(best_genome, config, stats, out_dir)
+    TASK.show_results(best_genome, config, stats, out_dir)
 
 
 def clean_output():
@@ -66,10 +56,6 @@ def clean_output():
 
 
 if __name__ == '__main__':
-    # Determine path to configuration file. This path manipulation is
-    # here so that the script will run successfully regardless of the
-    # current working directory.
-
     # Clean results of previous run if any or init the ouput directory
     clean_output()
 
