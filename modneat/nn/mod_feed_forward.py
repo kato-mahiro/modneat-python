@@ -1,4 +1,5 @@
 from modneat.graphs import feed_forward_layers
+from modneat.genome import ModGenome
 
 
 class ModFeedForwardNetwork(object):
@@ -9,6 +10,10 @@ class ModFeedForwardNetwork(object):
         self.values = dict((key, 0.0) for key in inputs + outputs)
         self.modulate_values = dict((key, 0.0) for key in inputs + outputs)
         self.modulated_values = dict((key, 0.0) for key in inputs + outputs)
+    
+    @staticmethod
+    def genome_type():
+        return ModGenome
 
     def activate(self, inputs):
         if len(self.input_nodes) != len(inputs):

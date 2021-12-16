@@ -1,4 +1,5 @@
 from modneat.graphs import feed_forward_layers
+from modneat.genome import ExGenome
 
 
 class ExFeedForwardNetwork(object):
@@ -7,6 +8,10 @@ class ExFeedForwardNetwork(object):
         self.output_nodes = outputs
         self.node_evals = node_evals
         self.values = dict((key, 0.0) for key in inputs + outputs)
+    
+    @staticmethod
+    def genome_type():
+        return ExGenome
 
     def activate(self, inputs):
         if len(self.input_nodes) != len(inputs):
