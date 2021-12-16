@@ -16,7 +16,6 @@ local_dir = os.path.dirname(__file__)
 def create_parser():
     parser = argparse.ArgumentParser()
     parser.add_argument('--network_type', type=str, help='', default='FeedForwardNetwork')
-    parser.add_argument('--genome_type', type=str, help='', default='DefaultGenome')
     parser.add_argument('--config_path', type=str, help='', default='./config/config.ini')
     parser.add_argument('--savedir', type=str, help='', default='./results')
     parser.add_argument('--task', type=str, help='', default='task.xor')
@@ -71,7 +70,8 @@ if __name__ == '__main__':
     # Get args
     args = create_parser()
     NETWORK_TYPE = eval('modneat.nn.' + args.network_type)
-    GENOME_TYPE = eval('modneat.' + args.genome_type)
+    genome_type = NETWORK_TYPE.genome_type()
+    GENOME_TYPE = eval('modneat.' + genome_type)
     TASK = eval(args.task + '(network_type = NETWORK_TYPE)')
     CONFIG_PATH = os.path.join(local_dir, args.config_path)
     MEMO = args.memo
