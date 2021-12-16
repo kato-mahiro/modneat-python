@@ -1,4 +1,5 @@
 from modneat.graphs import feed_forward_layers
+from modneat.genome import DefaultGenome
 
 class FeedForwardNetwork(object):
     def __init__(self, inputs, outputs, node_evals):
@@ -9,7 +10,7 @@ class FeedForwardNetwork(object):
     
     @staticmethod
     def genome_type():
-        return 'DefaultGenome'
+        return DefaultGenome
 
     def activate(self, inputs):
         if len(self.input_nodes) != len(inputs):

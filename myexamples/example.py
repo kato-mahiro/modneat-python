@@ -70,8 +70,7 @@ if __name__ == '__main__':
     # Get args
     args = create_parser()
     NETWORK_TYPE = eval('modneat.nn.' + args.network_type)
-    genome_type = NETWORK_TYPE.genome_type()
-    GENOME_TYPE = eval('modneat.' + genome_type)
+    GENOME_TYPE = NETWORK_TYPE.genome_type()
     TASK = eval(args.task + '(network_type = NETWORK_TYPE)')
     CONFIG_PATH = os.path.join(local_dir, args.config_path)
     MEMO = args.memo
