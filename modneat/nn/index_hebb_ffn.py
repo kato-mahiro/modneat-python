@@ -1,5 +1,5 @@
 from modneat.graphs import feed_forward_layers
-from modneat.genome import ExGenome
+from modneat.genome import IndExHebbGenome
 
 
 class IndExHebbFFN(object):
@@ -11,7 +11,7 @@ class IndExHebbFFN(object):
     
     @staticmethod
     def genome_type():
-        return ExGenome
+        return IndExHebbGenome
 
     def activate(self, inputs):
         if len(self.input_nodes) != len(inputs):
