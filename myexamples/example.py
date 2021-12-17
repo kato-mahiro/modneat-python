@@ -16,7 +16,7 @@ local_dir = os.path.dirname(__file__)
 def create_parser():
     parser = argparse.ArgumentParser()
     parser.add_argument('--network', type=str, help='', default='FeedForwardNetwork')
-    parser.add_argument('--config', type=str, help='', default='./config/config.ini')
+    parser.add_argument('--config', type=str, help='', default='./configs/default_genome.ini')
     parser.add_argument('--savedir', type=str, help='', default='./results')
     parser.add_argument('--task', type=str, help='', default='task.xor')
     parser.add_argument('--generation', type=int, help='', default=100)
