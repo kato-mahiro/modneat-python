@@ -2,7 +2,7 @@ from modneat.graphs import feed_forward_layers
 from modneat.genome import ExModGenome
 
 
-class ExModFeedForwardNetwork(object):
+class ModIndExHebbFFN(object):
     def __init__(self, inputs, outputs, node_evals):
         self.input_nodes = inputs
         self.output_nodes = outputs
@@ -98,4 +98,4 @@ class ExModFeedForwardNetwork(object):
 
                 node_evals.append((node, ng.modulatory, activation_function, aggregation_function, ng.bias, ng.response, inputs))
 
-        return ExModFeedForwardNetwork(config.genome_config.input_keys, config.genome_config.output_keys, node_evals)
+        return ModIndExHebbFFN(config.genome_config.input_keys, config.genome_config.output_keys, node_evals)
