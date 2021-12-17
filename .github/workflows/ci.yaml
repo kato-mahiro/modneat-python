@@ -24,9 +24,9 @@ jobs:
       - name: Install python dependencies
         run: pip install -r requirements.txt
       - name: Run Default
-        run: python ./myexamples/example.py --generation 10 --task task.xor 
+        run: python ./myexamples/example.py --generation 10 --task task.xor --config ./myexamples/configs/default_genome.ini
       - name: Run HebbFFN
-        run: python ./myexamples/example.py --network HebbFFN --generation 10
+        run: python ./myexamples/example.py --network HebbFFN --generation 10 --config ./myexamples/configs/default_genome.ini
       - name: Run IndExHebbFFN
         run: python ./myexamples/example.py --network IndExHebbFFN --config ./myexamples/configs/indexhebb_genome.ini --generation 10
       - name: Run ModHebbFFN
