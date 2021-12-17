@@ -20,18 +20,18 @@ jobs:
       - name: Get Python version
         run: python -V
       - name: Install package dependencies
-        run: sudo apt install -y graphviz
+        run: sudo apt update && sudo apt install -y graphviz
+      - name: Upgrade pip
+        run: pip install --upgrade pip
       - name: Install python dependencies
         run: pip install -r requirements.txt
-      - name: cd workspace
-        run: cd ./myexamples
       - name: Run Default
-        run: python ./example.py --generation 10 --task task.xor --config ./configs/default_genome.ini
+        run: cd ./myexamples && python ./example.py --generation 10 --task task.xor --config ./configs/default_genome.ini
       - name: Run HebbFFN
-        run: python ./example.py --network HebbFFN --generation 10 --config ./configs/default_genome.ini
+        run: cd ./myexamples && python ./example.py --network HebbFFN --generation 10 --config ./configs/default_genome.ini
       - name: Run IndExHebbFFN
-        run: python ./example.py --network IndExHebbFFN --config ./configs/indexhebb_genome.ini --generation 10
+        run: cd ./myexamples && python ./example.py --network IndExHebbFFN --config ./configs/indexhebb_genome.ini --generation 10
       - name: Run ModHebbFFN
-        run: python ./example.py --network ModHebbFFN --config ./configs/mod_genome.ini --generation 10
+        run: cd ./myexamples && python ./example.py --network ModHebbFFN --config ./configs/mod_genome.ini --generation 10
       - name: Run ModIndExHebbFFN
-        run: python ./example.py --network ModIndExHebbFFN --config ./configs/modindexhebb_genome --generation 10
+        run: cd ./myexamples && python ./example.py --network ModIndExHebbFFN --config ./configs/modindexhebb_genome --generation 10
