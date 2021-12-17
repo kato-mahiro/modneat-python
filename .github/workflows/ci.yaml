@@ -34,4 +34,4 @@ jobs:
       - name: Run ModHebbFFN
         run: cd ./myexamples && python ./example.py --network ModHebbFFN --config ./configs/mod_genome.ini --generation 10
       - name: Run ModIndExHebbFFN
-        run: cd ./myexamples && python ./example.py --network ModIndExHebbFFN --config ./configs/modindexhebb_genome --generation 10
+        run: cd ./myexamples && python ./example.py --network ModIndExHebbFFN --config ./configs/modindexhebb_genome.ini --generation 10
