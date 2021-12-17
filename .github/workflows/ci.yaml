@@ -20,7 +20,7 @@ jobs:
       - name: Get Python version
         run: python -V
       - name: Install package dependencies
-        run: apt install -y graphviz
+        run: sudo apt install -y graphviz
       - name: Install python dependencies
         run: pip install -r requirements.txt
       - name: Run Python
