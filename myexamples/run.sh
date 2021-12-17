@@ -30,11 +30,11 @@ echo $config_file
 savesubdir=$(echo "${task}_${network}"  | tr '.' '_')
 
 
-sudo ../utils/run.pl JOB_NO=1:${job_no} ${logdir}/log.JOB_NO.txt \
+../utils/run.pl JOB_NO=1:${job_no} ${logdir}/log.JOB_NO.txt \
     python ./example.py \
     --network $network \
     --config $config_file \
     --task $task \
-    --generation $generation\
+    --generation $generation \
     --savedir $savedir/$savesubdir \
     --run_id JOB_NO
