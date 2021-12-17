@@ -23,5 +23,13 @@ jobs:
         run: sudo apt install -y graphviz
       - name: Install python dependencies
         run: pip install -r requirements.txt
-      - name: Run Python
-        run: python ./myexamples/example.py
+      - name: Run Default
+        run: python ./myexamples/example.py --generation 10 --task task.xor 
+      - name: Run HebbFFN
+        run: python ./myexamples/example.py --model HebbFFN --generation 10
+      - name: Run IndExHebbFFN
+        run: python ./myexamples/example.py --model IndExHebbFFN --generation 10
+      - name: Run ModHebbFFN
+        run: python ./myexamples/example.py --model ModHebFFN --generation 10
+      - name: Run ModIndExHebbFFN
+        run: python ./myexamples/example.py --model ModIndExHebFFN --generation 10
