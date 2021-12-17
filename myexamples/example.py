@@ -15,8 +15,8 @@ local_dir = os.path.dirname(__file__)
 
 def create_parser():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--network_type', type=str, help='', default='FeedForwardNetwork')
-    parser.add_argument('--config_path', type=str, help='', default='./config/config.ini')
+    parser.add_argument('--network', type=str, help='', default='FeedForwardNetwork')
+    parser.add_argument('--config', type=str, help='', default='./config/config.ini')
     parser.add_argument('--savedir', type=str, help='', default='./results')
     parser.add_argument('--task', type=str, help='', default='task.xor')
     parser.add_argument('--generation', type=int, help='', default=100)
@@ -69,15 +69,15 @@ def clean_output():
 if __name__ == '__main__':
     # Get args
     args = create_parser()
-    NETWORK_TYPE = eval('modneat.nn.' + args.network_type)
+    NETWORK_TYPE = eval('modneat.nn.' + args.network)
     GENOME_TYPE = NETWORK_TYPE.genome_type()
     TASK = eval(args.task + '(network_type = NETWORK_TYPE)')
-    CONFIG_PATH = os.path.join(local_dir, args.config_path)
+    CONFIG_PATH = os.path.join(local_dir, args.config)
     MEMO = args.memo
     GENERATION = args.generation
 
     # The directory to store outputs
-    out_dir = os.path.join(local_dir, args.savedir, args.task + '_' + args.network_type + '_' + str(args.run_id))
+    out_dir = os.path.join(local_dir, args.savedir, args.task + '_' + args.network + '_' + str(args.run_id))
 
     # Clean results of previous run if any or init the ouput directory
     clean_output()
