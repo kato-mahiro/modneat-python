@@ -23,7 +23,5 @@ jobs:
         run: sudo apt install -y graphviz
       - name: Install python dependencies
         run: pip install -r requirements.txt
-      - name: Run ls
-        run: ls
       - name: Run Python
-        run: python ./myexample/example.py
+        run: python ./myexamples/example.py
