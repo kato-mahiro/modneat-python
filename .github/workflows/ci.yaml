@@ -36,4 +36,4 @@ jobs:
       - name: Run ModIndExHebbFFN
         run: cd ./myexamples && python ./example.py --network ModIndExHebbFFN --config ./configs/modindexhebb_genome.ini --generation 10
       - name: test run.sh
-        run: cd ./myexamples && bash run.sh --network ModIndExFFN --config_file ./configs/modindexhebb_genome.ini --task task.non_static
+        run: cd ./myexamples && sudo bash run.sh --network ModIndExFFN --config_file ./configs/modindexhebb_genome.ini --task task.non_static
