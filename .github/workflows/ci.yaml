@@ -28,8 +28,8 @@ jobs:
       - name: Run HebbFFN
         run: python ./myexamples/example.py --network HebbFFN --generation 10
       - name: Run IndExHebbFFN
-        run: python ./myexamples/example.py --network IndExHebbFFN --generation 10
+        run: python ./myexamples/example.py --network IndExHebbFFN --config ./myexamples/configs/indexhebb_genome.ini --generation 10
       - name: Run ModHebbFFN
-        run: python ./myexamples/example.py --network ModHebFFN --generation 10
+        run: python ./myexamples/example.py --network ModHebbFFN --config ./myexamples/configs/mod_genome.ini --generation 10
       - name: Run ModIndExHebbFFN
-        run: python ./myexamples/example.py --network ModIndExHebFFN --generation 10
+        run: python ./myexamples/example.py --network ModIndExHebbFFN --config ./myexamples/configs/modindexhebb_genome --generation 10
