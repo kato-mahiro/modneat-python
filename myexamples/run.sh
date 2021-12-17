@@ -26,4 +26,5 @@ EOF
 . ../utils/parse_options.sh
 
 ../utils/run.pl JOB_NO=1:${job_no} ${logdir}/log.JOB_NO.txt \
-    python ./example.py
+    python ./example.py \
+    --run_id JOB_NO
