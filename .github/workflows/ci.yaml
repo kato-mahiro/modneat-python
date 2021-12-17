@@ -23,7 +23,7 @@ jobs:
         run: sudo apt install -y graphviz
       - name: Install python dependencies
         run: pip install -r requirements.txt
-      -name: cd workspace
+      - name: cd workspace
         run: cd ./myexamples
       - name: Run Default
         run: python ./example.py --generation 10 --task task.xor --config ./configs/default_genome.ini
