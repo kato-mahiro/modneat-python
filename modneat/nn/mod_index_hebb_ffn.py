@@ -1,5 +1,10 @@
+import math
 from modneat.graphs import feed_forward_layers
 from modneat.genome import ModIndExHebbGenome
+
+def sigmoid(a):
+    s = 1 / (1 + math.e ** -a)
+    return s
 
 
 class ModIndExHebbFFN(object):
@@ -37,14 +42,15 @@ class ModIndExHebbFFN(object):
 
         # Caliculate modulated_values of each node
         for node, modulatory, act_func, agg_func, bias, response, links in self.node_evals:
-            self.modulated_values[node] = 0.0 
+            self.modulated_values[node] = 0.0
             for i, w, a, b, c, d in links:
                 self.modulated_values[node] += self.modulate_values[i] * w
+            
 
         # Update weight value using modulated value
         for node, modulatory, act_func, agg_func, bias, response, links in self.node_evals:
             for i, w, a, b, c, d in links:
-                update_val = self.modulated_values[node] * \
+                update_val = sigmoid(self.modulated_values[node]) * \
                              (
                                 a * (self.values[node] * self.values[i]) + 
                                 b * (self.values[node]) +  
