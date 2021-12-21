@@ -67,4 +67,4 @@ class non_static(xor):
     def __init__(self, network_type):
         self.network_type = network_type
         self.xor_inputs  = [(1.0, 1.0), (1.0, 1.0), (1.0, 1.0), (1.0, 1.0)]
-        self.xor_outputs = [   (1.0,),     (0.66,),     (0.33,),     (0.0,)]
+        self.xor_outputs = [   (1.0,),     (0.33,),     (-0.33,),     (-1.0,)]
