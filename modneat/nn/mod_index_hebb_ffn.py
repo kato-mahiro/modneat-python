@@ -3,9 +3,11 @@ from modneat.graphs import feed_forward_layers
 from modneat.genome import ModIndExHebbGenome
 
 def sigmoid(a):
-    s = 1 / (1 + math.e ** -a)
-    return s
-
+    try: #HACK: overflow対策
+        s = 1 / (1 + math.e ** -a)
+        return s
+    except OverflowError:
+        return 0.0
 
 class ModIndExHebbFFN(object):
     def __init__(self, inputs, outputs, node_evals):
