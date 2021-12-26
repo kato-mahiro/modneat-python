@@ -170,7 +170,7 @@ class DefaultGenome(object):
         self.key = key
 
         # (gene_key, gene) pairs for gene sets.
-        self.global_params = {}
+        self.global_params = {} #global_param has only [0] as a valid key.
         self.connections = {}
         self.nodes = {}
 
@@ -269,6 +269,9 @@ class DefaultGenome(object):
             else:
                 # Homologous gene: combine genes from both parents.
                 self.nodes[key] = ng1.crossover(ng2)
+        
+        # Inherit global genes
+        self.global_params[0] = parent1.global_params[0].crossover(parent2.global_params[0])
 
     def mutate(self, config):
         """ Mutates this genome. """
@@ -307,6 +310,11 @@ class DefaultGenome(object):
         # Mutate node genes (bias, response, etc.).
         for ng in self.nodes.values():
             ng.mutate(config)
+
+        # Mutate global genes.
+        for gg in self.global_params.values():
+            gg.mutate(config)
+
 
     def mutate_add_node(self, config):
         if not self.connections:
@@ -448,7 +456,12 @@ class DefaultGenome(object):
                                    (config.compatibility_disjoint_coefficient *
                                     disjoint_connections)) / max_conn
 
-        distance = node_distance + connection_distance
+        # Compute global gene differences.
+        g1 = self.global_params[0]
+        g2 = other.global_params[0]
+        global_distance = g1.distance(g2, config)
+
+        distance = node_distance + connection_distance + global_distance
         return distance
 
     def size(self):
