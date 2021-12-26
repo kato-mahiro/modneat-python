@@ -1,12 +1,17 @@
 from modneat.graphs import feed_forward_layers
+from modneat.genome import DefaultGenome
 
 
-class ExFeedForwardNetwork(object):
+class HebbFFN(object):
     def __init__(self, inputs, outputs, node_evals):
         self.input_nodes = inputs
         self.output_nodes = outputs
         self.node_evals = node_evals
         self.values = dict((key, 0.0) for key in inputs + outputs)
+
+    @staticmethod
+    def genome_type():
+        return DefaultGenome
 
     def activate(self, inputs):
         if len(self.input_nodes) != len(inputs):
@@ -17,18 +22,15 @@ class ExFeedForwardNetwork(object):
 
         for node, act_func, agg_func, bias, response, links in self.node_evals:
             node_inputs = []
-            for i, w, a, b, c, d in links:
+            for i, w in links:
                 node_inputs.append(self.values[i] * w)
             s = agg_func(node_inputs)
             self.values[node] = act_func(bias + response * s)
 
         for node, act_func, agg_func, bias, response, links in self.node_evals:
             node_inputs = []
-            for i, w, a, b, c, d in links:
-                update_val =  a * self.values[i] * self.values[node] + \
-                              b * self.values[i] +  \
-                              c * self.values[node] + \
-                              d
+            for i, w in links:
+                update_val =  0.1 * self.values[i] * self.values[node]
                 self.weight_change(i, node, update_val)
 
         return [self.values[i] for i in self.output_nodes]
@@ -40,7 +42,7 @@ class ExFeedForwardNetwork(object):
         for _output_node, act_func, agg_func, bias, response, links in self.node_evals:
             node_loop_counter += 1
             connection_loop_counter = -1
-            for _input_node, _weight, a, b, c, d in links:
+            for _input_node, _weight in links:
                 connection_loop_counter += 1
                 if(input_node == _input_node and output_node == _output_node):
                     listed_node_and_weight = list(self.node_evals[node_loop_counter][5][connection_loop_counter])
@@ -67,7 +69,7 @@ class ExFeedForwardNetwork(object):
                     inode, onode = conn_key
                     if onode == node:
                         cg = genome.connections[conn_key]
-                        inputs.append((inode, cg.weight, cg.a, cg.b, cg.c, cg.d))
+                        inputs.append((inode, cg.weight))
                         node_expr.append("v[{}] * {:.7e}".format(inode, cg.weight))
 
                 ng = genome.nodes[node]
@@ -75,4 +77,4 @@ class ExFeedForwardNetwork(object):
                 activation_function = config.genome_config.activation_defs.get(ng.activation)
                 node_evals.append((node, activation_function, aggregation_function, ng.bias, ng.response, inputs))
 
-        return ExFeedForwardNetwork(config.genome_config.input_keys, config.genome_config.output_keys, node_evals)
+        return HebbFFN(config.genome_config.input_keys, config.genome_config.output_keys, node_evals)

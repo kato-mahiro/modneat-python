@@ -1,18 +1,18 @@
 from setuptools import setup
 
 setup(
-    name='neat-python',
-    version='0.92',
-    author='cesar.gomes, mirrorballu2',
-    author_email='nobody@nowhere.com',
-    maintainer='CodeReclaimers, LLC',
-    maintainer_email='alan@codereclaimers.com',
-    url='https://github.com/CodeReclaimers/neat-python',
+    name='modneat-python',
+    version='0.1.0',
+    author='kato-mahiro, cesar.gomes, mirrorballu2',
+    author_email='katomasahiro10@gmail.com',
+    maintainer='kato-mahiro',
+    maintainer_email='katomasahiro10@gmail.com',
+    url='https://github.com/kato-mahiro/modneat-python',
     license="BSD",
-    description='A NEAT (NeuroEvolution of Augmenting Topologies) implementation',
+    description='A Modulatory NEAT (NeuroEvolution of Augmenting Topologies) implementation',
     long_description='Python implementation of NEAT (NeuroEvolution of Augmenting Topologies), a method ' +
                      'developed by Kenneth O. Stanley for evolving arbitrary neural networks.',
-    packages=['neat', 'neat/iznn', 'neat/nn', 'neat/ctrnn'],
+    packages=['modneat', 'modneat/iznn', 'modneat/nn', 'modneat/ctrnn'],
     classifiers=[
         'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',

@@ -86,7 +86,7 @@ def plot_species(statistics, view=False, filename='speciation.svg'):
 
 
 def draw_net(config, genome, view=False, filename=None, directory=None, node_names=None, show_disabled=True, prune_unused=False,
-             node_colors=None, fmt='svg'):
+             node_colors=None, fmt='png'):
     """ Receives a genome and draws a neural network with arbitrary topology. """
     # Attributes for network nodes.
     if graphviz is None:
@@ -161,6 +161,7 @@ def draw_net(config, genome, view=False, filename=None, directory=None, node_nam
             attrs = {'style': 'filled',
                     'shape': 'circle',
                     'fillcolor': node_colors.get(n, 'white')}
+
 
         dot.node(str(n), _attributes=attrs)
 

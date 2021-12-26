@@ -1,7 +1,15 @@
+import math
 from modneat.graphs import feed_forward_layers
+from modneat.genome import ModIndExHebbGenome
 
+def sigmoid(a):
+    try: #HACK: overflow対策
+        s = 1 / (1 + math.e ** -a)
+        return s
+    except OverflowError:
+        return 0.0
 
-class ExModFeedForwardNetwork(object):
+class ModIndExHebbFFN(object):
     def __init__(self, inputs, outputs, node_evals):
         self.input_nodes = inputs
         self.output_nodes = outputs
@@ -9,6 +17,10 @@ class ExModFeedForwardNetwork(object):
         self.values = dict((key, 0.0) for key in inputs + outputs)
         self.modulate_values = dict((key, 0.0) for key in inputs + outputs)
         self.modulated_values = dict((key, 0.0) for key in inputs + outputs)
+
+    @staticmethod
+    def genome_type():
+        return ModIndExHebbGenome
 
     def activate(self, inputs):
         if len(self.input_nodes) != len(inputs):
@@ -32,14 +44,15 @@ class ExModFeedForwardNetwork(object):
 
         # Caliculate modulated_values of each node
         for node, modulatory, act_func, agg_func, bias, response, links in self.node_evals:
-            self.modulated_values[node] = 0.0 
+            self.modulated_values[node] = 0.0
             for i, w, a, b, c, d in links:
                 self.modulated_values[node] += self.modulate_values[i] * w
+            
 
         # Update weight value using modulated value
         for node, modulatory, act_func, agg_func, bias, response, links in self.node_evals:
             for i, w, a, b, c, d in links:
-                update_val = self.modulated_values[node] * \
+                update_val = sigmoid(self.modulated_values[node]) * \
                              (
                                 a * (self.values[node] * self.values[i]) + 
                                 b * (self.values[node]) +  
@@ -93,4 +106,4 @@ class ExModFeedForwardNetwork(object):
 
                 node_evals.append((node, ng.modulatory, activation_function, aggregation_function, ng.bias, ng.response, inputs))
 
-        return ExModFeedForwardNetwork(config.genome_config.input_keys, config.genome_config.output_keys, node_evals)
+        return ModIndExHebbFFN(config.genome_config.input_keys, config.genome_config.output_keys, node_evals)

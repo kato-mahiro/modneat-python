@@ -1,0 +1,41 @@
+name: Action ci
+
+on:
+  push:
+    branches: 
+      - master
+  workflow_dispatch:
+
+jobs:
+  example-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          token: ${{secrets.GITHUB_TOKEN}}
+          python-version: '3.8'
+          architecture: 'x64'
+      - name: Get Python version
+        run: python -V
+      - name: Install package dependencies
+        run: sudo apt update && sudo apt install -y graphviz
+      - name: Upgrade pip
+        run: pip install --upgrade pip
+      - name: Install python dependencies
+        run: pip install -r requirements.txt
+      - name: Install modneat
+        run: pip install .
+      - name: Run Default
+        run: cd ./myexamples && python ./example.py --generation 10
+      - name: Run HebbFFN
+        run: cd ./myexamples && python ./example.py --network HebbFFN --generation 10 --config ./configs/default_genome.ini
+      - name: Run IndExHebbFFN
+        run: cd ./myexamples && python ./example.py --network IndExHebbFFN --config ./configs/indexhebb_genome.ini --generation 10
+      - name: Run ModHebbFFN
+        run: cd ./myexamples && python ./example.py --network ModHebbFFN --config ./configs/mod_genome.ini --generation 10
+      - name: Run ModIndExHebbFFN
+        run: cd ./myexamples && python ./example.py --network ModIndExHebbFFN --config ./configs/modindexhebb_genome.ini --generation 10
+      - name: test run.sh
+        run: cd ./myexamples && bash run.sh --network ModIndExHebbFFN --config_file ./configs/modindexhebb_genome.ini --task task.non_static
