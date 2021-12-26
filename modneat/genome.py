@@ -10,7 +10,7 @@ import sys
 from modneat.activations import ActivationFunctionSet
 from modneat.aggregations import AggregationFunctionSet
 from modneat.config import ConfigParameter, write_pretty_params
-from modneat.genes import DefaultConnectionGene, DefaultNodeGene, DefaultIndividualGene, ExHebbConnectionGene, HebbianRuledConnectionGene, ModNodeGene
+from modneat.genes import DefaultConnectionGene, DefaultNodeGene, DefaultGlobalGene, ExHebbConnectionGene, HebbianRuledConnectionGene, ModNodeGene
 from modneat.graphs import creates_cycle
 
 
@@ -47,8 +47,8 @@ class DefaultGenomeConfig(object):
         self._params += self.node_gene_type.get_config_params()
         self.connection_gene_type = params['connection_gene_type']
         self._params += self.connection_gene_type.get_config_params()
-        self.individual_gene_type = params['individual_gene_type']
-        self._params += self.individual_gene_type.get_config_params()
+        self.global_gene_type = params['global_gene_type']
+        self._params += self.global_gene_type.get_config_params()
 
         # Use the configuration data to interpret the supplied parameters.
         for p in self._params:
@@ -158,7 +158,7 @@ class DefaultGenome(object):
     def parse_config(cls, param_dict):
         param_dict['node_gene_type'] = DefaultNodeGene
         param_dict['connection_gene_type'] = DefaultConnectionGene
-        param_dict['individual_gene_type'] = DefaultIndividualGene
+        param_dict['global_gene_type'] = DefaultGlobalGene
         return DefaultGenomeConfig(param_dict)
 
     @classmethod
