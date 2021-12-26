@@ -170,7 +170,7 @@ class DefaultGenome(object):
         self.key = key
 
         # (gene_key, gene) pairs for gene sets.
-        self.individual_params = {}
+        self.global_params = {}
         self.connections = {}
         self.nodes = {}
 
@@ -180,8 +180,8 @@ class DefaultGenome(object):
     def configure_new(self, config):
         """Configure a new genome based on the given configuration."""
 
-        #Create individual param genes.
-        self.individual_params[0] = self.create_individual_params(config, 0)
+        #Create global param genes.
+        self.global_params[0] = self.create_global_params(config, 0)
 
         # Create node genes for the output pins.
         for node_key in config.output_keys:
@@ -483,8 +483,8 @@ class DefaultGenome(object):
         return connection
 
     @staticmethod
-    def create_individual_params(config, param_id):
-        param = config.individual_gene_type(param_id)
+    def create_global_params(config, param_id):
+        param = config.global_gene_type(param_id)
         param.init_attributes(config)
         return param
 
