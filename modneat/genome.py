@@ -481,6 +481,12 @@ class DefaultGenome(object):
         connections.sort()
         for c in connections:
             s += "\n\t" + str(c)
+
+        s += "\nGlobal params:"
+        gparams = list(self.global_params.values())
+        gparams.sort()
+        for g in gparams:
+            s += "\n\t" + str(g)
         return s
 
     @staticmethod
