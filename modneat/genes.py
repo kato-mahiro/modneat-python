@@ -73,16 +73,7 @@ class BaseGene(object):
         return new_gene
 
 class DefaultGlobalGene(BaseGene):
-    _gene_attributes = [FloatAttribute('example',
-                            init_mean = 0.0,
-                            init_stdev = 1.0,
-                            replace_rate = 0.1,
-                            mutate_rate = 0.1,
-                            mutate_power = 0.1,
-                            max_value = 1.0,
-                            min_value = -1.0
-                            )
-                        ]
+    _gene_attributes = []
 
     def __init__(self, key):
         assert isinstance(key, int), "DefaultGlobalGene key must be an int, not {!r}".format(key)
@@ -187,3 +178,9 @@ class HebbianRuledConnectionGene(DefaultConnectionGene):
         return (d * config.compatibility_weight_coefficient + \
                 d2 * config.compatibility_evoparam_coefficient) \
                 / (config.compatibility_weight_coefficient + config.compatibility_evoparam_coefficient)
+
+class ExampleGlobalGene(DefaultGlobalGene):
+    _gene_attributes = [FloatAttribute('example_float'),
+                        BoolAttribute('example_bool'),
+                        StringAttribute('example_string'),
+                        ]
