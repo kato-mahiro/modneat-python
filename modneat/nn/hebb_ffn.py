@@ -1,7 +1,6 @@
 from modneat.graphs import feed_forward_layers
 from modneat.genome import DefaultGenome
-import utils
-
+from . import utils
 
 class HebbFFN(object):
     def __init__(self, inputs, outputs, node_evals):
