@@ -1,6 +1,6 @@
 from modneat.graphs import feed_forward_layers
 from modneat.genome import DefaultGenome
-from . import utils
+from modneat.nn.utils import weight_change
 
 class HebbFFN(object):
     def __init__(self, inputs, outputs, node_evals):
@@ -31,7 +31,7 @@ class HebbFFN(object):
             node_inputs = []
             for i, w in links:
                 update_val =  0.1 * self.values[i] * self.values[node]
-                utils.weight_change(self, i, node, update_val)
+                weight_change(self, i, node, update_val)
 
         return [self.values[i] for i in self.output_nodes]
 
