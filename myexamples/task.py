@@ -1,3 +1,4 @@
+from matplotlib.pyplot import hist
 from modneat import visualize
 import os
 
@@ -8,7 +9,7 @@ class xor:
         self.xor_inputs  = [(1.0, 1.0), (1.0, 0.0), (0.0, 1.0), (0.0, 0.0)]
         self.xor_outputs = [   (0.0,),     (1.0,),     (1.0,),     (0.0,)]
 
-    def eval_fitness(self, net):
+    def eval_fitness(self, net, history_log = False):
         """
         Arguments:
             net: The feed-forward neural network generated from genome
@@ -16,13 +17,19 @@ class xor:
             The fitness score - the higher score the means the better 
             fit organism. Maximal score: 16.0
         """
+        log = []
         error_sum = 0.0
         for xi, xo in zip(self.xor_inputs, self.xor_outputs):
+            if(history_log):
+                log.append(net.__dict__)
             output = net.activate(xi)
             error_sum += abs(output[0] - xo[0])
         # Calculate amplified fitness
         fitness = (4 - error_sum) ** 2
-        return fitness
+        if(not history_log):
+            return fitness
+        else:
+            return(fitness, log)
 
     def eval_genomes(self, genomes, config):
         """
