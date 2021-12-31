@@ -3,10 +3,12 @@ def weight_change(self, input_node, output_node, value):
     node_loop_counter = -1
 
     for _output_node, _, _, _, _, links in self.node_evals:
+        links_item_count = len(list(links)[0])
+
         node_loop_counter += 1
         connection_loop_counter = -1
 
-        if(len(links) == 2):
+        if( links_item_count == 2):
             for _input_node, _ in links:
                 connection_loop_counter += 1
                 if(input_node == _input_node and output_node == _output_node):
@@ -17,7 +19,7 @@ def weight_change(self, input_node, output_node, value):
                 else:
                     pass
 
-        elif(len(links) == 6):
+        elif( links_item_count == 6):
             for _input_node, _, _, _, _, _ in links:
                 connection_loop_counter += 1
                 if(input_node == _input_node and output_node == _output_node):
