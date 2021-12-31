@@ -234,5 +234,8 @@ class FileOutReporter(BaseReporter):
                 print("\nSpecies {0} with {1} members is stagnated: removing it".format(sid, len(species.members)), file=f)
 
     def info(self, msg):
-        with open(self.savepath, 'a') as f:
-            print(msg, file=f)
+        try:
+            with open(self.savepath, 'a') as f:
+                print(msg, file=f)
+        except:
+            print(f"*** [WARNING] FileOutputReporter couldn't find a savepath {self.savepath}")
