@@ -2,7 +2,7 @@ def weight_change(self, input_node, output_node, value):
     """ Add value to connection weight between input_node and output_node. """
     node_loop_counter = -1
 
-    for _output_node, act_func, agg_func, bias, response, links in self.node_evals:
+    for _output_node, _, _, _, _, links in self.node_evals:
         node_loop_counter += 1
         connection_loop_counter = -1
 
