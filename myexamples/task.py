@@ -1,6 +1,7 @@
 from matplotlib.pyplot import hist
 from modneat import visualize
 import os
+import copy
 
 class xor:
     # The XOR inputs and expected corresponding outputs for fitness evaluation
@@ -20,9 +21,10 @@ class xor:
         log = []
         error_sum = 0.0
         for xi, xo in zip(self.xor_inputs, self.xor_outputs):
-            if(history_log):
-                log.append(net.__dict__)
             output = net.activate(xi)
+            if(history_log):
+                log.append(copy.deepcopy(net.__dict__))
+                print('***:', net.__dict__)
             error_sum += abs(output[0] - xo[0])
         # Calculate amplified fitness
         fitness = (4 - error_sum) ** 2
