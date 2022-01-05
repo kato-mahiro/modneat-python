@@ -20,11 +20,13 @@ class xor:
         """
         log = []
         error_sum = 0.0
+        if(history_log):
+            log.append(copy.deepcopy(net.__dict__))
+
         for xi, xo in zip(self.xor_inputs, self.xor_outputs):
             output = net.activate(xi)
             if(history_log):
                 log.append(copy.deepcopy(net.__dict__))
-                print('***:', net.__dict__)
             error_sum += abs(output[0] - xo[0])
         # Calculate amplified fitness
         fitness = (4 - error_sum) ** 2
