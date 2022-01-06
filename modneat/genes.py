@@ -82,6 +82,28 @@ class DefaultGlobalGene(BaseGene):
     def distance(self, other, config):
         return 0.0
 
+class ExampleGlobalGene(DefaultGlobalGene):
+    _gene_attributes = [FloatAttribute('example_float'),
+                        BoolAttribute('example_bool'),
+                        StringAttribute('example_string'),
+                        ]
+
+class ExHebbGlobalGene(DefaultGlobalGene):
+    _gene_attributes = [FloatAttribute('eta'),
+                        FloatAttribute('a'),
+                        FloatAttribute('b'),
+                        FloatAttribute('c'),
+                        FloatAttribute('d'),
+                        ]
+
+    def distance(self, other, config):
+        d = abs(self.eta - other.eta) + \
+            abs(self.a - other.a) + \
+            abs(self.b - other.b) + \
+            abs(self.c - other.c) + \
+            abs(self.d - other.d)
+
+        return d * config.compatibility_global_param_coefficient
 
 # TODO: Should these be in the nn module?  iznn and ctrnn can have additional attributes.
 
@@ -178,9 +200,3 @@ class HebbianRuledConnectionGene(DefaultConnectionGene):
         return (d * config.compatibility_weight_coefficient + \
                 d2 * config.compatibility_evoparam_coefficient) \
                 / (config.compatibility_weight_coefficient + config.compatibility_evoparam_coefficient)
-
-class ExampleGlobalGene(DefaultGlobalGene):
-    _gene_attributes = [FloatAttribute('example_float'),
-                        BoolAttribute('example_bool'),
-                        StringAttribute('example_string'),
-                        ]

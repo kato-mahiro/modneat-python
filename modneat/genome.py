@@ -10,7 +10,7 @@ import sys
 from modneat.activations import ActivationFunctionSet
 from modneat.aggregations import AggregationFunctionSet
 from modneat.config import ConfigParameter, write_pretty_params
-from modneat.genes import DefaultConnectionGene, DefaultNodeGene, DefaultGlobalGene, ExHebbConnectionGene, ExampleGlobalGene, HebbianRuledConnectionGene, ModNodeGene
+from modneat.genes import DefaultConnectionGene, DefaultNodeGene, DefaultGlobalGene, ExHebbConnectionGene, ExHebbGlobalGene, ExampleGlobalGene, HebbianRuledConnectionGene, ModNodeGene
 from modneat.graphs import creates_cycle
 
 
@@ -33,7 +33,7 @@ class DefaultGenomeConfig(object):
                         ConfigParameter('feed_forward', bool),
                         ConfigParameter('compatibility_disjoint_coefficient', float),
                         ConfigParameter('compatibility_weight_coefficient', float),
-                        ConfigParameter('compatibility_evoparam_coefficient', float, default=1.0),
+                        ConfigParameter('compatibility_global_param_coefficient', float),
                         ConfigParameter('conn_add_prob', float),
                         ConfigParameter('conn_delete_prob', float),
                         ConfigParameter('node_add_prob', float),
@@ -614,6 +614,14 @@ class IndExHebbGenome(DefaultGenome):
         param_dict['node_gene_type'] = DefaultNodeGene
         param_dict['connection_gene_type'] = ExHebbConnectionGene
         param_dict['global_gene_type'] = DefaultGlobalGene
+        return DefaultGenomeConfig(param_dict)
+
+class ExHebbGenome(DefaultGenome):
+    @classmethod
+    def parse_config(cls, param_dict):
+        param_dict['node_gene_type'] = DefaultNodeGene
+        param_dict['connection_gene_type'] = DefaultConnectionGene
+        param_dict['global_gene_type'] = ExHebbGlobalGene
         return DefaultGenomeConfig(param_dict)
 
 class ModIndExHebbGenome(DefaultGenome):

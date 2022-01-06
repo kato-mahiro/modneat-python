@@ -1,5 +1,5 @@
 from modneat.graphs import feed_forward_layers
-from modneat.genome import IndExHebbGenome
+from modneat.genome import ExHebbGenome
 from modneat.nn.utils import weight_change
 
 
@@ -13,7 +13,7 @@ class ExHebbFFN(object):
     
     @staticmethod
     def genome_type():
-        return IndExHebbGenome
+        return ExHebbGenome
 
     def activate(self, inputs):
         if len(self.input_nodes) != len(inputs):
@@ -60,7 +60,7 @@ class ExHebbFFN(object):
                     inode, onode = conn_key
                     if onode == node:
                         cg = genome.connections[conn_key]
-                        inputs.append((inode, cg.weight, cg.a, cg.b, cg.c, cg.d))
+                        inputs.append((inode, cg.weight))
                         node_expr.append("v[{}] * {:.7e}".format(inode, cg.weight))
 
                 ng = genome.nodes[node]
