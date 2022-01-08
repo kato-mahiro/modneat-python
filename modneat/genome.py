@@ -10,7 +10,7 @@ import sys
 from modneat.activations import ActivationFunctionSet
 from modneat.aggregations import AggregationFunctionSet
 from modneat.config import ConfigParameter, write_pretty_params
-from modneat.genes import DefaultConnectionGene, DefaultNodeGene, DefaultGlobalGene, ExHebbConnectionGene, ExHebbGlobalGene, ExampleGlobalGene, HebbianRuledConnectionGene, ModNodeGene
+from modneat.genes import DefaultConnectionGene, DefaultNodeGene, DefaultGlobalGene, ExHebbConnectionGene, ExHebbGlobalGene, ExampleGlobalGene, ModNodeGene
 from modneat.graphs import creates_cycle
 
 
@@ -632,13 +632,6 @@ class ModIndExHebbGenome(DefaultGenome):
         param_dict['global_gene_type'] = DefaultGlobalGene
         return DefaultGenomeConfig(param_dict)
 
-class HebbianRuledGenome(DefaultGenome):
-    @classmethod
-    def parse_config(cls, param_dict):
-        param_dict['node_gene_type'] = DefaultNodeGene
-        param_dict['connection_gene_type'] = HebbianRuledConnectionGene
-        param_dict['global_gene_type'] = DefaultGlobalGene
-        return DefaultGenomeConfig(param_dict)
 
 class ExampleGlobalGenome(DefaultGenome):
     @classmethod

@@ -184,19 +184,3 @@ class ExHebbConnectionGene(DefaultConnectionGene):
         return (d * config.compatibility_weight_coefficient + \
                 d2 * config.compatibility_evoparam_coefficient) \
                 / 2.0
-
-class HebbianRuledConnectionGene(DefaultConnectionGene):
-    _gene_attributes = [FloatAttribute('weight'),
-                        BoolAttribute('enabled'),
-                        FloatAttribute('eta', init_mean = 0.0, init_stdev = 1.0)]
-
-    def distance(self, other, config):
-        d = abs(self.weight - other.weight)
-        d2 = (abs(self.eta))
-        if self.enabled != other.enabled:
-            d += 1.0
-            d2 += 1.0
-
-        return (d * config.compatibility_weight_coefficient + \
-                d2 * config.compatibility_evoparam_coefficient) \
-                / (config.compatibility_weight_coefficient + config.compatibility_evoparam_coefficient)
