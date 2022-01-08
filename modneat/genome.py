@@ -34,6 +34,7 @@ class DefaultGenomeConfig(object):
                         ConfigParameter('compatibility_disjoint_coefficient', float),
                         ConfigParameter('compatibility_weight_coefficient', float),
                         ConfigParameter('compatibility_global_param_coefficient', float, default=1.0),
+                        ConfigParameter('compatibility_evoparam_coefficient', float, default=1.0),
                         ConfigParameter('conn_add_prob', float),
                         ConfigParameter('conn_delete_prob', float),
                         ConfigParameter('node_add_prob', float),
