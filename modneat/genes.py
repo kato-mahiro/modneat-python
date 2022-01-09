@@ -94,6 +94,7 @@ class ExHebbGlobalGene(DefaultGlobalGene):
                         FloatAttribute('b'),
                         FloatAttribute('c'),
                         FloatAttribute('d'),
+                        FloatAttribute('m_d')
                         ]
 
     def distance(self, other, config):
@@ -101,7 +102,8 @@ class ExHebbGlobalGene(DefaultGlobalGene):
             abs(self.a - other.a) + \
             abs(self.b - other.b) + \
             abs(self.c - other.c) + \
-            abs(self.d - other.d)
+            abs(self.d - other.d) + \
+            abs(self.m_d - other.m_d)
 
         return d * config.compatibility_global_param_coefficient
 

@@ -1,5 +1,6 @@
+import math
 from modneat.graphs import feed_forward_layers
-from modneat.genome import ExHebbGenome
+from modneat.genome import ExHebbGenome, ModExHebbGenome
 from modneat.nn.utils import weight_change
 
 
@@ -9,11 +10,13 @@ class ModExHebbFFN(object):
         self.output_nodes = outputs
         self.node_evals = node_evals
         self.values = dict((key, 0.0) for key in inputs + outputs)
+        self.modulate_values = dict((key, 0.0) for key in inputs + outputs)
+        self.modulated_values = dict((key, 0.0) for key in inputs + outputs)
         self.global_params = global_params
     
     @staticmethod
     def genome_type():
-        return ExHebbGenome
+        return ModExHebbGenome
 
     def activate(self, inputs):
         if len(self.input_nodes) != len(inputs):
@@ -22,17 +25,31 @@ class ModExHebbFFN(object):
         for k, v in zip(self.input_nodes, inputs):
             self.values[k] = v
 
-        for node, act_func, agg_func, bias, response, links in self.node_evals:
+        for node, modulatory, act_func, agg_func, bias, response, links in self.node_evals:
             node_inputs = []
             for i, w in links:
                 node_inputs.append(self.values[i] * w)
             s = agg_func(node_inputs)
             self.values[node] = act_func(bias + response * s)
 
-        for node, act_func, agg_func, bias, response, links in self.node_evals:
-            node_inputs = []
+            if( not modulatory):
+                self.values[node] = act_func(bias + response * s)
+                self.modulate_values[node] = 0.0
+            elif (modulatory):
+                self.values[node] = 0.0
+                self.modulate_values[node] = act_func(bias + response * s)
+
+        # Caliculate modulated_values of each node
+        for node, modulatory, act_func, agg_func, bias, response, links in self.node_evals:
+            self.modulated_values[node] = self.global_params['m_d']
             for i, w in links:
-                update_val = self.global_params['eta'] * \
+                self.modulated_values[node] += self.modulate_values[i] * w
+
+        for node, modulatory, act_func, agg_func, bias, response, links in self.node_evals:
+            for i, w in links:
+                #Soltoggioの設定に基づいて重みを更新
+                update_val = math.tanh (self.modulated_values[node] / 2.0) * \
+                            self.global_params['eta'] * \
                             (
                                 self.global_params['a'] * self.values[i] * self.values[node] + \
                                 self.global_params['b'] * self.values[i] + \
@@ -66,7 +83,7 @@ class ModExHebbFFN(object):
                 ng = genome.nodes[node]
                 aggregation_function = config.genome_config.aggregation_function_defs.get(ng.aggregation)
                 activation_function = config.genome_config.activation_defs.get(ng.activation)
-                node_evals.append((node, activation_function, aggregation_function, ng.bias, ng.response, inputs))
+                node_evals.append((node, ng.modulatory, activation_function, aggregation_function, ng.bias, ng.response, inputs))
 
         global_params = genome.global_params[0].__dict__
 
