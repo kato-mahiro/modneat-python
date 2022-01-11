@@ -30,7 +30,7 @@ class ExHebbFFN(object):
             self.values[node] = act_func(bias + response * s)
 
         for node, act_func, agg_func, bias, response, links in self.node_evals:
-            node_inputs = []
+            node_inputs = [] #TODO: remove
             for i, w in links:
                 update_val = self.global_params['eta'] * \
                             (
