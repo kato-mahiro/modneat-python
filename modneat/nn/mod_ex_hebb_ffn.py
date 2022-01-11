@@ -30,7 +30,7 @@ class ModExHebbFFN(object):
             for i, w in links:
                 node_inputs.append(self.values[i] * w)
             s = agg_func(node_inputs)
-            self.values[node] = act_func(bias + response * s)
+            self.values[node] = act_func(bias + response * s) #HOTFIX: 消す!!
 
             if( not modulatory):
                 self.values[node] = act_func(bias + response * s)

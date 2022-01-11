@@ -7,4 +7,5 @@ from modneat.nn.ex_hebb_ffn import ExHebbFFN
 from modneat.nn.mod_ex_hebb_ffn import ModExHebbFFN
 from modneat.nn.recurrent import RecurrentNetwork
 from modneat.nn.ex_hebb_rnn import ExHebbRNN
+from modneat.nn.mod_ex_hebb_rnn import ModExHebbRNN
 from modneat.nn import utils
