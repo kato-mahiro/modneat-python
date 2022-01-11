@@ -41,5 +41,7 @@ jobs:
         run: cd ./myexamples && python ./example.py --network ExHebbFFN --config ./configs/exhebb_genome.ini --generation 10
       - name: Run ModExHebbFFN
         run: cd ./myexamples && python ./example.py --network ModExHebbFFN --config ./configs/modexhebb_genome.ini --generation 10
+      - name: Run ExHebbRNN
+        run: cd ./myexamples && python ./example.py --network ExHebbRNN --config ./configs/exhebb_genome_rnn.ini --generation 10
       - name: test run.sh
         run: cd ./myexamples && bash run.sh --network ModIndExHebbFFN --config_file ./configs/modindexhebb_genome.ini --task task.non_static
