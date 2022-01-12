@@ -31,8 +31,8 @@ class ModExHebbRNN(object):
 
     def reset(self):
         self.values = [dict((k, 0.0) for k in v) for v in self.values]
-        self.modulate_values = [dict((k, 0.0) for k in v) for v in self.modulate_values] #TODO: fix
-        self.modulated_values = [dict((k, 0.0) for k in v) for v in self.modulated_values] #TODO: fix
+        self.modulate_values = copy.deepcopy(self.values[0])
+        self.modulated_values = copy.deepcopy(self.values[0])
         self.active = 0
 
     def activate(self, inputs):
