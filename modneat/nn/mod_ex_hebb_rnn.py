@@ -9,6 +9,7 @@ class ModExHebbRNN(object):
         self.input_nodes = inputs
         self.output_nodes = outputs
         self.node_evals = node_evals
+        self.original_node_evals = copy.deepcopy(self.node_evals)
         self.global_params = global_params
 
         self.values = [{}, {}]
@@ -30,6 +31,7 @@ class ModExHebbRNN(object):
         return ModExHebbGenome
 
     def reset(self):
+        self.node_evals = copy.deepcopy(self.original_node_evals)
         self.values = [dict((k, 0.0) for k in v) for v in self.values]
         self.modulate_values = copy.deepcopy(self.values[0])
         self.modulated_values = copy.deepcopy(self.values[0])
