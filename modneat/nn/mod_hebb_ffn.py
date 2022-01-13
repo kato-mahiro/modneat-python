@@ -1,3 +1,4 @@
+import copy
 from modneat.graphs import feed_forward_layers
 from modneat.genome import ModGenome
 from modneat.nn.utils import weight_change
@@ -8,6 +9,7 @@ class ModHebbFFN(object):
         self.input_nodes = inputs
         self.output_nodes = outputs
         self.node_evals = node_evals
+        self.original_node_evals = copy.deepcopy(self.node_evals)
         self.values = dict((key, 0.0) for key in inputs + outputs)
         self.modulate_values = dict((key, 0.0) for key in inputs + outputs)
         self.modulated_values = dict((key, 0.0) for key in inputs + outputs)
@@ -15,6 +17,9 @@ class ModHebbFFN(object):
     @staticmethod
     def genome_type():
         return ModGenome
+
+    def reset(self):
+        self.node_evals = copy.deepcopy(self.original_node_evals)
 
     def activate(self, inputs):
         if len(self.input_nodes) != len(inputs):

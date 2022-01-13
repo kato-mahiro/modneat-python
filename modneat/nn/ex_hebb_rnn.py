@@ -1,3 +1,4 @@
+import copy
 from modneat.graphs import required_for_output
 from modneat.genome import ExHebbGenome
 from modneat.nn.utils import weight_change
@@ -7,6 +8,7 @@ class ExHebbRNN(object):
         self.input_nodes = inputs
         self.output_nodes = outputs
         self.node_evals = node_evals
+        self.original_node_evals = copy.deepcopy(self.node_evals)
         self.global_params = global_params
 
         self.values = [{}, {}]
@@ -25,6 +27,7 @@ class ExHebbRNN(object):
         return ExHebbGenome
 
     def reset(self):
+        self.node_evals = copy.deepcopy(self.original_node_evals)
         self.values = [dict((k, 0.0) for k in v) for v in self.values]
         self.active = 0
 

@@ -12,6 +12,9 @@ class FeedForwardNetwork(object):
     def genome_type():
         return DefaultGenome
 
+    def reset(self):
+        pass
+
     def activate(self, inputs):
         if len(self.input_nodes) != len(inputs):
             raise RuntimeError("Expected {0:n} inputs, got {1:n}".format(len(self.input_nodes), len(inputs)))
