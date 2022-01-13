@@ -18,6 +18,7 @@ class xor:
             The fitness score - the higher score the means the better 
             fit organism. Maximal score: 16.0
         """
+        net.reset()
         log = []
         error_sum = 0.0
         if(history_log):
