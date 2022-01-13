@@ -9,7 +9,7 @@ class ExHebbFFN(object):
         self.input_nodes = inputs
         self.output_nodes = outputs
         self.node_evals = node_evals
-        self.original_node_evals = copy.deepcoy(self.node_evals)
+        self.original_node_evals = copy.deepcopy(self.node_evals)
         self.values = dict((key, 0.0) for key in inputs + outputs)
         self.global_params = global_params
     
