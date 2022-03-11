@@ -10,7 +10,7 @@ class xor:
         self.xor_inputs  = [(1.0, 1.0), (1.0, 0.0), (0.0, 1.0), (0.0, 0.0)]
         self.xor_outputs = [   (0.0,),     (1.0,),     (1.0,),     (0.0,)]
 
-    def eval_fitness(self, net, history_log = False):
+    def eval_fitness(self, net):
         """
         Arguments:
             net: The feed-forward neural network generated from genome
@@ -19,22 +19,17 @@ class xor:
             fit organism. Maximal score: 16.0
         """
         net.reset()
-        log = []
+        history = []
         error_sum = 0.0
-        if(history_log):
-            log.append(copy.deepcopy(net.__dict__))
+        history.append(copy.deepcopy(net.__dict__))
 
         for xi, xo in zip(self.xor_inputs, self.xor_outputs):
             output = net.activate(xi)
-            if(history_log):
-                log.append(copy.deepcopy(net.__dict__))
+            history.append(copy.deepcopy(net.__dict__))
             error_sum += abs(output[0] - xo[0])
         # Calculate amplified fitness
         fitness = (4 - error_sum) ** 2
-        if(not history_log):
-            return fitness
-        else:
-            return(fitness, log)
+        return fitness, history
 
     def eval_genomes(self, genomes, config):
         """
@@ -47,7 +42,7 @@ class xor:
         for genome_id, genome in genomes:
             genome.fitness = 4.0
             net = self.network_type.create(genome, config)
-            genome.fitness = self.eval_fitness(net)
+            genome.fitness, genome.history = self.eval_fitness(net)
     
     def show_results(self, best_genome, config, stats, out_dir):
         # Display the best genome among generations.
@@ -62,7 +57,7 @@ class xor:
             print("input {!r}, expected output {!r}, got {!r}".format(xi, xo, output))
 
         # Check if the best genome is an adequate XOR solver
-        best_genome_fitness = self.eval_fitness(net)
+        best_genome_fitness, best_genome_history = self.eval_fitness(net)
         if best_genome_fitness > config.fitness_threshold:
             print("\n\nSUCCESS: The XOR problem solver found!!!")
         else:
