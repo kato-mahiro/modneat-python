@@ -29,9 +29,8 @@ echo $config_file
 
 savesubdir=$(echo "${task}_${network}"  | tr '.' '_')
 
-
 ../utils/run.pl JOB_NO=1:${job_no} ${logdir}/log.JOB_NO.txt \
-    python ./example.py \
+    python ./run_task.py \
     --network $network \
     --config $config_file \
     --task $task \

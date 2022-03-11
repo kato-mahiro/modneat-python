@@ -28,6 +28,37 @@ a good place to start) and then try creating your own experiment.
 
 The documentation, is available on [Read The Docs](http://neat-python.readthedocs.io).
 
+## About modneat ##
+modneatライブラリはneat-pythonを変更し以下の機能を提供します
+- モデルにグローバルなパラメータを追加するための機能
+- ヘブ則による重み更新機能
+- 拡張ヘブ則による重み更新機能
+- 修飾ニューロンを用いた重み更新機能
+
+詳細については、`modneat-examples/README.md` を参考にしてください。
+
+## Setup ##
+python 3.8 にて動作確認済み
+
+```
+# Install dependencies
+sudo apt update && sudo apt install -y graphviz
+
+# Clone this repository
+git clone https://github.com/katomasahiro10/modneat-python
+
+# Install python dependencies
+cd modneat-python
+pip install -r requirements.txt
+
+# Install package
+pip install .
+
+# Run example
+python ./modneat-examples/run_task.py
+
+```
+
 ## Citing ##
 
 Here is a Bibtex entry you can use to cite this project in a publication. The listed authors are the maintainers of

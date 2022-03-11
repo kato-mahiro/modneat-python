@@ -28,22 +28,22 @@ jobs:
       - name: Install modneat
         run: pip install .
       - name: Run Default
-        run: cd ./myexamples && python ./example.py --generation 10
+        run: cd ./modneat-examples && python ./run_task.py --generation 10
       - name: Run HebbFFN
-        run: cd ./myexamples && python ./example.py --network HebbFFN --generation 10 --config ./configs/default_genome.ini
+        run: cd ./modneat-examples && python ./run_task.py --network HebbFFN --generation 10 --config ./configs/default_genome.ini
       - name: Run IndExHebbFFN
-        run: cd ./myexamples && python ./example.py --network IndExHebbFFN --config ./configs/indexhebb_genome.ini --generation 10
+        run: cd ./modneat-examples && python ./run_task.py --network IndExHebbFFN --config ./configs/indexhebb_genome.ini --generation 10
       - name: Run ModHebbFFN
-        run: cd ./myexamples && python ./example.py --network ModHebbFFN --config ./configs/mod_genome.ini --generation 10
+        run: cd ./modneat-examples && python ./run_task.py --network ModHebbFFN --config ./configs/mod_genome.ini --generation 10
       - name: Run ModIndExHebbFFN
-        run: cd ./myexamples && python ./example.py --network ModIndExHebbFFN --config ./configs/modindexhebb_genome.ini --generation 10
+        run: cd ./modneat-examples && python ./run_task.py --network ModIndExHebbFFN --config ./configs/modindexhebb_genome.ini --generation 10
       - name: Run ExHebbFFN
-        run: cd ./myexamples && python ./example.py --network ExHebbFFN --config ./configs/exhebb_genome.ini --generation 10
+        run: cd ./modneat-examples && python ./run_task.py --network ExHebbFFN --config ./configs/exhebb_genome.ini --generation 10
       - name: Run ModExHebbFFN
-        run: cd ./myexamples && python ./example.py --network ModExHebbFFN --config ./configs/modexhebb_genome.ini --generation 10
+        run: cd ./modneat-examples && python ./run_task.py --network ModExHebbFFN --config ./configs/modexhebb_genome.ini --generation 10
       - name: Run ExHebbRNN
-        run: cd ./myexamples && python ./example.py --network ExHebbRNN --config ./configs/exhebb_genome_rnn.ini --generation 10
+        run: cd ./modneat-examples && python ./run_task.py --network ExHebbRNN --config ./configs/exhebb_genome_rnn.ini --generation 10
       - name: Run ModExHebbRNN
-        run: cd ./myexamples && python ./example.py --network ModExHebbRNN --config ./configs/modexhebb_genome_rnn.ini --generation 10
+        run: cd ./modneat-examples && python ./run_task.py --network ModExHebbRNN --config ./configs/modexhebb_genome_rnn.ini --generation 10
       - name: test run.sh
-        run: cd ./myexamples && bash run.sh --network ModIndExHebbFFN --config_file ./configs/modindexhebb_genome.ini --task task.non_static
+        run: cd ./modneat-examples && bash run_task_parallel.sh --network ModIndExHebbFFN --config_file ./configs/modindexhebb_genome.ini --task task.non_static
