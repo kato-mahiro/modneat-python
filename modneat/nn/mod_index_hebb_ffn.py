@@ -26,7 +26,7 @@ class ModIndExHebbFFN(object):
         return ModIndExHebbGenome
 
     def reset(self):
-        self.node_evals = copy.deepcopy(self.node_evals)
+        self.node_evals = copy.deepcopy(self.original_node_evals)
 
     def activate(self, inputs):
         if len(self.input_nodes) != len(inputs):
