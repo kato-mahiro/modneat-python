@@ -15,6 +15,7 @@ def create_parser():
     parser = argparse.ArgumentParser()
     parser.add_argument('--network', type=str, help='', default='FeedForwardNetwork')
     parser.add_argument('--config', type=str, help='', default='./configs/default_genome.ini')
+    parser.add_argument('--checkpoint_interval', type=int, help='', default=100)
     parser.add_argument('--savedir', type=str, help='', default='./results')
     parser.add_argument('--task', type=str, help='', default='task.xor')
     parser.add_argument('--generation', type=int, help='', default=100)
@@ -42,7 +43,7 @@ def run_experiment(config_file):
     p.add_reporter(modneat.FileOutReporter(True, out_dir + '/results.txt'))
     stats = modneat.StatisticsReporter()
     p.add_reporter(stats)
-    p.add_reporter(modneat.Checkpointer(5, filename_prefix= out_dir + '/checkpoints/checkpoint-'))
+    p.add_reporter(modneat.Checkpointer(CHECKPOINT_INTERVAL, filename_prefix= out_dir + '/checkpoints/checkpoint-'))
 
     # Run for up to args.generations.
     best_genome = p.run(TASK.eval_genomes, GENERATION)
@@ -67,6 +68,7 @@ if __name__ == '__main__':
     TASK = eval(args.task + '(network_type = NETWORK_TYPE)')
     CONFIG_PATH = os.path.join(local_dir, args.config)
     GENERATION = args.generation
+    CHECKPOINT_INTERVAL = args.checkpoint_interval
 
     # The directory to store outputs
     out_dir = os.path.join(local_dir, args.savedir, args.task + '_' + args.network + '_' + str(args.run_id))

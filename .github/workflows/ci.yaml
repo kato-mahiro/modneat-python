@@ -46,4 +46,4 @@ jobs:
       - name: Run ModExHebbRNN
         run: cd ./modneat-examples && python ./run_task.py --network ModExHebbRNN --config ./configs/modexhebb_genome_rnn.ini --generation 10
       - name: test run.sh
-        run: cd ./modneat-examples && bash run_task_parallel.sh --network ModIndExHebbFFN --config_file ./configs/modindexhebb_genome.ini --task task.non_static
+        run: cd ./modneat-examples && bash run_task_parallel.sh --network ModIndExHebbFFN --config_file ./configs/modindexhebb_genome.ini --task task.non_static --checkpoint_interval 10
