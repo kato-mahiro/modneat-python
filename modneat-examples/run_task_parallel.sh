@@ -7,6 +7,7 @@ config_file='./configs/default_genome.ini'
 task='task.xor'
 job_no=1
 generation=10
+checkpoint_interval=100
 savedir='./results'
 logdir='./logs'
 
@@ -19,6 +20,7 @@ Options:
     --task: モデルに課すタスクを指定 (default=${task})
     --job_no: 並列実行数を指定 (default=${task})
     --generation: 実験を何世代行うかを指定 (default=${task})
+    --checkpoint_interval : チェックポイントを何世代ごとに保存するかを指定
     --savedir: 実験結果を保存するディレクトリ (default=${savedir})
 EOF
 )
@@ -35,5 +37,6 @@ savesubdir=$(echo "${task}_${network}"  | tr '.' '_')
     --config $config_file \
     --task $task \
     --generation $generation \
+    --checkpoint_interval $checkpoint_interval \
     --savedir $savedir/$savesubdir \
     --run_id JOB_NO
