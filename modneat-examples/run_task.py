@@ -40,10 +40,10 @@ def run_experiment(config_file):
 
     # Add a stdout reporter to show progress in the terminal.
     p.add_reporter(modneat.StdOutReporter(True))
-    p.add_reporter(modneat.FileOutReporter(True, out_dir + '/results.txt'))
+    p.add_reporter(modneat.FileOutReporter(True, savedir = out_dir + '/results.txt'))
     stats = modneat.StatisticsReporter()
     p.add_reporter(stats)
-    p.add_reporter(modneat.Checkpointer(CHECKPOINT_INTERVAL, filename_prefix= out_dir + '/checkpoints/checkpoint-'))
+    p.add_reporter(modneat.Checkpointer(CHECKPOINT_INTERVAL, savedir= out_dir + '/checkpoints/checkpoint-'))
 
     # Run for up to args.generations.
     best_genome = p.run(TASK.eval_genomes, GENERATION)
