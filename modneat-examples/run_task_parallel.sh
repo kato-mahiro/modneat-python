@@ -10,6 +10,7 @@ generation=10
 checkpoint_interval=100
 savedir='./results'
 logdir='./logs'
+description=''
 
 help_message=$(cat << EOF
 Usage: $0 [options]
@@ -22,6 +23,7 @@ Options:
     --generation: 実験を何世代行うかを指定 (default=${task})
     --checkpoint_interval : チェックポイントを何世代ごとに保存するかを指定
     --savedir: 実験結果を保存するディレクトリ (default=${savedir})
+    --comment: 実験に関するコメント・説明
 EOF
 )
 
@@ -30,6 +32,12 @@ echo $network
 echo $config_file
 
 savesubdir=$(echo "${task}_${network}"  | tr '.' '_')
+
+if [ ! -d $savedir/$savesubdir/ ]; then
+    mkdir $savedir/$savesubdir
+fi
+cp $config_file $savedir/$savesubdir/
+echo $description > $savedir/$savesubdir/description.txt
 
 ../utils/run.pl JOB_NO=1:${job_no} ${logdir}/log.JOB_NO.txt \
     python ./run_task.py \
