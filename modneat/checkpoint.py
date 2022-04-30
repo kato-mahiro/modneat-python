@@ -1,9 +1,11 @@
 """Uses `pickle` to save and restore populations (and other aspects of the simulation state)."""
 from __future__ import print_function
 
+import os
 import gzip
 import random
 import time
+import modneat
 
 try:
     import cPickle as pickle  # pylint: disable=import-error
@@ -12,6 +14,7 @@ except ImportError:
 
 from modneat.population import Population
 from modneat.reporting import BaseReporter
+from modneat import visualize
 
 
 class Checkpointer(BaseReporter):
@@ -20,21 +23,22 @@ class Checkpointer(BaseReporter):
     to save and restore populations (and other aspects of the simulation state).
     """
 
-    def __init__(self, generation_interval=100, time_interval_seconds=300,
-                 filename_prefix='neat-checkpoint-'):
+    def __init__(self, savedir, stats, generation_interval=100, time_interval_seconds=300):
         """
         Saves the current state (at the end of a generation) every ``generation_interval`` generations or
         ``time_interval_seconds``, whichever happens first.
 
+        :param str savedir: Name of a directory which store checkpoints and graph
         :param generation_interval: If not None, maximum number of generations between save intervals
         :type generation_interval: int or None
         :param time_interval_seconds: If not None, maximum number of seconds between checkpoint attempts
         :type time_interval_seconds: float or None
-        :param str filename_prefix: Prefix for the filename (the end will be the generation number)
         """
+        self.savedir = savedir
+        self.stats = stats
         self.generation_interval = generation_interval
         self.time_interval_seconds = time_interval_seconds
-        self.filename_prefix = filename_prefix
+        self.filename_prefix = self.savedir + '/checkpoints/checkpoint-'
 
         self.current_generation = None
         self.last_generation_checkpoint = -1
@@ -69,6 +73,9 @@ class Checkpointer(BaseReporter):
         with gzip.open(filename, 'w', compresslevel=5) as f:
             data = (generation, config, population, species_set, random.getstate())
             pickle.dump(data, f, protocol=pickle.HIGHEST_PROTOCOL)
+
+        visualize.plot_stats(self.stats, ylog=False, view=False, filename=os.path.join(self.savedir, 'avg_fitness.png'))
+        visualize.plot_species(self.stats, view=False, filename=os.path.join(self.savedir, 'speciation.png'))
 
     @staticmethod
     def restore_checkpoint(filename):
