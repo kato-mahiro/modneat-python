@@ -3,6 +3,7 @@ from modneat import visualize
 import os
 import copy
 import gym
+import time
 
 class xor:
     # The XOR inputs and expected corresponding outputs for fitness evaluation
@@ -121,3 +122,56 @@ class cartpole_v0:
         visualize.draw_net(config, best_genome, False, node_names=node_names, directory=out_dir)
         visualize.plot_stats(stats, ylog=False, view=False, filename=os.path.join(out_dir, 'avg_fitness.png'))
         visualize.plot_species(stats, view=False, filename=os.path.join(out_dir, 'speciation.png'))
+
+class time_xor:
+    def __init__(self, network_type):
+        self.network_type = network_type
+        self.xor_inputs  = [(1.0, 1.0), (1.0, 0.0), (0.0, 1.0), (0.0, 0.0)]
+        self.xor_outputs = [   (0.0,),     (1.0,),     (1.0,),     (0.0,)]
+
+    def eval_fitness(self,net):
+        #1回のeval_fitnessに0.1秒かかるタスク
+        net.reset()
+        history = []
+        error_sum = 0.0
+        history.append(copy.deepcopy(net.__dict__))
+
+        for xi, xo in zip(self.xor_inputs, self.xor_outputs):
+            output = net.activate(xi)
+            history.append(copy.deepcopy(net.__dict__))
+            error_sum += abs(output[0] - xo[0])
+        # Calculate amplified fitness
+        fitness = (4 - error_sum) ** 2
+        time.sleep(0.1)
+        return fitness, history
+
+    def eval_genomes(self, genomes, config):
+        """
+        Arguments:
+            genomes: The list of genomes from population in the 
+                    current generation
+            config: The configuration settings with algorithm
+                    hyper-parameters
+        """
+        for genome_id, genome in genomes:
+            genome.fitness = 4.0
+            net = self.network_type.create(genome, config)
+            genome.fitness, genome.history = self.eval_fitness(net)
+
+    def eval_single_genome(self, genome, config):
+        """
+        Arguments:
+            genome: A genome for the evaluation
+            config: The configuration settings with algorithm
+                    hyper-parameters
+        Return value:
+            fitness: single float value
+            history: information of the genome
+        """
+        genome.fitness = 4.0
+        net = self.network_type.create(genome, config)
+        fitness, history = self.eval_fitness(net)
+        return fitness, history
+    
+    def show_results(self, best_genome, config, stats, out_dir):
+        pass

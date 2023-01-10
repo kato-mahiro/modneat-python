@@ -5,6 +5,7 @@ import shutil
 
 # The NEAT-Python library imports
 import modneat
+from modneat import parallel
 # The helper used to visualize experiment results
 import task
 
@@ -20,11 +21,12 @@ def create_parser():
     parser.add_argument('--task', type=str, help='', default='task.xor')
     parser.add_argument('--generation', type=int, help='', default=100)
     parser.add_argument('--run_id', type=int, help='', default=0)
+    parser.add_argument('--num_workers', type=int, help='', default=0)
 
     args = parser.parse_args()
     return args
 
-def run_experiment(config_file):
+def run_experiment(config_file, num_workers):
     """
     Arguments:
         config_file: the path to the file with experiment configuration
@@ -47,7 +49,16 @@ def run_experiment(config_file):
                                         time_interval_seconds=None))
 
     # Run for up to args.generations.
-    best_genome = p.run(TASK.eval_genomes, GENERATION)
+    if(num_workers == 0 or num_workers == 1):
+        best_genome = p.run(TASK.eval_genomes, GENERATION)
+    else:
+        if(hasattr(TASK, 'eval_single_genome')):
+            parallel_evaluator = parallel.ParallelEvaluator(num_workers=num_workers, eval_function=TASK.eval_single_genome)
+            best_genome = p.run(parallel_evaluator.evaluate, GENERATION)
+        else:
+            print(f"Error: {TASK} has no method 'eval_single_genome'.")
+            print("please implement 'eval_single_genome' func for multithreading.")
+            sys.exit()
     TASK.show_results(best_genome, config, stats, out_dir)
 
 
@@ -70,6 +81,7 @@ if __name__ == '__main__':
     CONFIG_PATH = os.path.join(local_dir, args.config)
     GENERATION = args.generation
     CHECKPOINT_INTERVAL = args.checkpoint_interval
+    NUM_WORKERS = args.num_workers
 
     # The directory to store outputs
     out_dir = os.path.join(local_dir, args.savedir, args.task + '_' + args.network + '_' + str(args.run_id))
@@ -78,4 +90,4 @@ if __name__ == '__main__':
     clean_output()
 
     # Run the experiment
-    run_experiment(CONFIG_PATH)
+    run_experiment(CONFIG_PATH, NUM_WORKERS)
