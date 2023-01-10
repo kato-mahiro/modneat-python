@@ -1,5 +1,6 @@
 """Uses `pickle` to save and restore populations (and other aspects of the simulation state)."""
 from __future__ import print_function
+from operator import attrgetter
 
 import os
 import gzip
@@ -73,6 +74,12 @@ class Checkpointer(BaseReporter):
         with gzip.open(filename, 'w', compresslevel=5) as f:
             data = (generation, config, population, species_set, random.getstate())
             pickle.dump(data, f, protocol=pickle.HIGHEST_PROTOCOL)
+
+        """Save the png formatted figure of best network toplogy."""
+        list_of_genome = list(population.values())
+        list_of_genome = sorted(list_of_genome, key=attrgetter('fitness'))
+        best_genome = list_of_genome[-1]
+        visualize.draw_net(config, best_genome, directory=self.savedir+'/checkpoints', filename='best_{0}'.format(generation), show_disabled=False)
 
         visualize.plot_stats(self.stats, ylog=False, view=False, filename=os.path.join(self.savedir, 'avg_fitness.png'))
         visualize.plot_species(self.stats, view=False, filename=os.path.join(self.savedir, 'speciation.png'))
