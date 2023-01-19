@@ -17,6 +17,7 @@ def create_parser():
     parser.add_argument('--network', type=str, help='', default='FeedForwardNetwork')
     parser.add_argument('--config', type=str, help='', default='./configs/default_genome.ini')
     parser.add_argument('--checkpoint_interval', type=int, help='', default=100)
+    parser.add_argument('--checkpoint_load', type=str, help='', default='')
     parser.add_argument('--savedir', type=str, help='', default='./results')
     parser.add_argument('--task', type=str, help='', default='task.xor')
     parser.add_argument('--generation', type=int, help='', default=100)
@@ -38,7 +39,10 @@ def run_experiment(config_file, num_workers):
                          config_file)
 
     # Create the population, which is the top-level object for a NEAT run.
-    p = modneat.Population(config)
+    if(CHECKPOINT_LOAD_PATH == ''):
+        p = modneat.Population(config)
+    else:
+        p = modneat.Checkpointer.restore_checkpoint(CHECKPOINT_LOAD_PATH)
 
     # Add a stdout reporter to show progress in the terminal.
     p.add_reporter(modneat.StdOutReporter(True))
@@ -81,10 +85,14 @@ if __name__ == '__main__':
     CONFIG_PATH = os.path.join(local_dir, args.config)
     GENERATION = args.generation
     CHECKPOINT_INTERVAL = args.checkpoint_interval
+    CHECKPOINT_LOAD_PATH = args.checkpoint_load
     NUM_WORKERS = args.num_workers
 
     # The directory to store outputs
-    out_dir = os.path.join(local_dir, args.savedir, args.task + '_' + args.network + '_' + str(args.run_id))
+    if(CHECKPOINT_LOAD_PATH == ''):
+        out_dir = os.path.join(local_dir, args.savedir, args.task + '_' + args.network + '_' + str(args.run_id))
+    else:
+        out_dir = os.path.join(local_dir, args.savedir, '[CONTINUED]' + args.task + '_' + args.network + '_' + str(args.run_id))
 
     # Clean results of previous run if any or init the ouput directory
     clean_output()
