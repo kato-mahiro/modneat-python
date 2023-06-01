@@ -317,7 +317,7 @@ class DefaultGenome(object):
         for gg in self.global_params.values():
             gg.mutate(config)
 
-        self.remove_all_deactvated_connections(config)
+        self.remove_all_deactivated_connections(config)
         while True:
             if((not self.remove_all_dangling_nodes(config))
                 and
