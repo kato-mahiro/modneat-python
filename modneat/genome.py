@@ -317,6 +317,13 @@ class DefaultGenome(object):
         for gg in self.global_params.values():
             gg.mutate(config)
 
+        self.remove_all_deactvated_connections(config)
+        while True:
+            if((not self.remove_all_dangling_nodes(config))
+                and
+                (not self.remove_all_dangling_connections(config))
+            ):
+                break
 
     def mutate_add_node(self, config):
         if not self.connections:
@@ -338,6 +345,39 @@ class DefaultGenome(object):
         i, o = conn_to_split.key
         self.add_connection(config, i, new_node_id, 1.0, True)
         self.add_connection(config, new_node_id, o, conn_to_split.weight, True)
+
+    def remove_all_dangling_nodes(self, config):
+        list_of_all_currend_nodes = list(self.nodes)
+        input_nodes = config.input_keys
+        output_nodes = config.output_keys
+        list_of_all_non_output_input_nodes = [node for node in list_of_all_currend_nodes if (node not in input_nodes and node not in output_nodes)]
+        from_nodes, to_nodes = [], []
+        for (p1, p2) in list(self.connections):
+            from_nodes.append(p1)
+            to_nodes.append(p2)
+        found_at_least_one_dangling_node = False
+        for node_number in list_of_all_non_output_input_nodes:
+            if ((node_number not in from_nodes) or (node_number not in to_nodes)):
+                del self.nodes[node_number]
+                found_at_least_one_dangling_node = True
+        return found_at_least_one_dangling_node
+
+    def remove_all_deactivated_connections(self, config):
+        if not config.enabled_mutate_rate > 0:
+            for k in list(self.connections):
+                if (not self.connections[k].enabled):
+                    del self.connections[k]
+                #del self.connections[conn_to_split.key]
+
+    def remove_all_dangling_connections(self,config):
+        list_of_all_currend_nodes = list(self.nodes)
+        list_of_all_currend_nodes.extend(config.input_keys) # input_nodes
+        found_at_least_one_dangling_connection = False
+        for (f,t) in list(self.connections):
+            if ((f not in list_of_all_currend_nodes) or (t not in list_of_all_currend_nodes)):
+                del self.connections[(f,t)]
+                found_at_least_one_dangling_connection = True
+        return found_at_least_one_dangling_connection
 
     def add_connection(self, config, input_key, output_key, weight, enabled):
         # TODO: Add further validation of this connection addition?
