@@ -6,11 +6,16 @@ import shutil
 # The NEAT-Python library imports
 import modneat
 from modneat import parallel
-# The helper used to visualize experiment results
-#import task
 
 # The current working directory
-local_dir = os.path.dirname(__file__)
+local_dir = os.getcwd()
+sys.path.append(local_dir)
+try:
+    import task
+except:
+    print("Error: task.py not found in current directory.")
+    sys.exit()
+       
 
 def create_parser():
     parser = argparse.ArgumentParser()
@@ -77,7 +82,6 @@ def clean_output():
 
 
 if __name__ == '__main__':
-    print('Hello')
     # Get args
     args = create_parser()
     NETWORK_TYPE = eval('modneat.nn.' + args.network)
