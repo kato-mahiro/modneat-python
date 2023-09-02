@@ -24,7 +24,7 @@ def create_parser():
     parser.add_argument('--checkpoint_interval', type=int, help='', default=100)
     parser.add_argument('--checkpoint_load', type=str, help='', default='')
     parser.add_argument('--savedir', type=str, help='', default='./results')
-    parser.add_argument('--task', type=str, help='', default='non_static')
+    parser.add_argument('--task', type=str, help='', default='xor')
     parser.add_argument('--generation', type=int, help='', default=100)
     parser.add_argument('--run_id', type=int, help='', default=0)
     parser.add_argument('--num_workers', type=int, help='', default=0)
