@@ -23,7 +23,7 @@ class ModExHebbFFN(object):
     def reset(self):
         self.node_evals = copy.deepcopy(self.original_node_evals)
 
-    def activate(self, inputs):
+    def activate(self, inputs, is_update = True):
         if len(self.input_nodes) != len(inputs):
             raise RuntimeError("Expected {0:n} inputs, got {1:n}".format(len(self.input_nodes), len(inputs)))
 
@@ -50,18 +50,19 @@ class ModExHebbFFN(object):
             for i, w in links:
                 self.modulated_values[node] += self.modulate_values[i] * w
 
-        for node, modulatory, act_func, agg_func, bias, response, links in self.node_evals:
-            for i, w in links:
-                #Soltoggioの設定に基づいて重みを更新
-                update_val = math.tanh (self.modulated_values[node] / 2.0) * \
-                            self.global_params['eta'] * \
-                            (
-                                self.global_params['a'] * self.values[i] * self.values[node] + \
-                                self.global_params['b'] * self.values[i] + \
-                                self.global_params['c'] * self.values[node] + \
-                                self.global_params['d'] \
-                            )
-                weight_change(self, i, node, update_val)
+        if(is_update):
+            for node, modulatory, act_func, agg_func, bias, response, links in self.node_evals:
+                for i, w in links:
+                    #Soltoggioの設定に基づいて重みを更新
+                    update_val = math.tanh (self.modulated_values[node] / 2.0) * \
+                                self.global_params['eta'] * \
+                                (
+                                    self.global_params['a'] * self.values[i] * self.values[node] + \
+                                    self.global_params['b'] * self.values[i] + \
+                                    self.global_params['c'] * self.values[node] + \
+                                    self.global_params['d'] \
+                                )
+                    weight_change(self, i, node, update_val)
 
         return [self.values[i] for i in self.output_nodes]
 

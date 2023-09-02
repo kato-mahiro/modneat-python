@@ -13,6 +13,7 @@ species_fitness.csv
 *.pyc
 *.pyo
 __pycache__/
+results/
 *stats*.dat*
 out/
 *.svg

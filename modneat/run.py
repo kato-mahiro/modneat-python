@@ -6,20 +6,25 @@ import shutil
 # The NEAT-Python library imports
 import modneat
 from modneat import parallel
-# The helper used to visualize experiment results
-import task
 
 # The current working directory
-local_dir = os.path.dirname(__file__)
+local_dir = os.getcwd()
+sys.path.append(local_dir)
+try:
+    import task
+except:
+    print("Error: task.py not found in current directory.")
+    sys.exit()
+       
 
 def create_parser():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--network', type=str, help='', default='FeedForwardNetwork')
-    parser.add_argument('--config', type=str, help='', default='./configs/default_genome.ini')
+    parser.add_argument('--network', type=str, help='', default='ModExHebbFFN')
+    parser.add_argument('--config', type=str, help='', default='./configs/modexhebb_genome.ini')
     parser.add_argument('--checkpoint_interval', type=int, help='', default=100)
     parser.add_argument('--checkpoint_load', type=str, help='', default='')
     parser.add_argument('--savedir', type=str, help='', default='./results')
-    parser.add_argument('--task', type=str, help='', default='task.xor')
+    parser.add_argument('--task', type=str, help='', default='non_static')
     parser.add_argument('--generation', type=int, help='', default=100)
     parser.add_argument('--run_id', type=int, help='', default=0)
     parser.add_argument('--num_workers', type=int, help='', default=0)
@@ -81,7 +86,7 @@ if __name__ == '__main__':
     args = create_parser()
     NETWORK_TYPE = eval('modneat.nn.' + args.network)
     GENOME_TYPE = NETWORK_TYPE.genome_type()
-    TASK = eval(args.task + '(network_type = NETWORK_TYPE)')
+    TASK = eval('task.' + args.task + '(network_type = NETWORK_TYPE)')
     CONFIG_PATH = os.path.join(local_dir, args.config)
     GENERATION = args.generation
     CHECKPOINT_INTERVAL = args.checkpoint_interval
