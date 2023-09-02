@@ -24,7 +24,7 @@ def create_parser():
     parser.add_argument('--checkpoint_interval', type=int, help='', default=100)
     parser.add_argument('--checkpoint_load', type=str, help='', default='')
     parser.add_argument('--savedir', type=str, help='', default='./results')
-    parser.add_argument('--task', type=str, help='', default='task.non_static')
+    parser.add_argument('--task', type=str, help='', default='non_static')
     parser.add_argument('--generation', type=int, help='', default=100)
     parser.add_argument('--run_id', type=int, help='', default=0)
     parser.add_argument('--num_workers', type=int, help='', default=0)
@@ -86,7 +86,7 @@ if __name__ == '__main__':
     args = create_parser()
     NETWORK_TYPE = eval('modneat.nn.' + args.network)
     GENOME_TYPE = NETWORK_TYPE.genome_type()
-    TASK = eval(args.task + '(network_type = NETWORK_TYPE)')
+    TASK = eval('task.' + args.task + '(network_type = NETWORK_TYPE)')
     CONFIG_PATH = os.path.join(local_dir, args.config)
     GENERATION = args.generation
     CHECKPOINT_INTERVAL = args.checkpoint_interval
