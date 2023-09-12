@@ -30,28 +30,24 @@ class ModExHebbFFN(object):
         for k, v in zip(self.input_nodes, inputs):
             self.values[k] = v
 
-        for node, modulatory, act_func, agg_func, bias, response, links in self.node_evals:
+        for node, modulatory_ratio, act_func, agg_func, bias, response, links in self.node_evals:
             node_inputs = []
             for i, w in links:
                 node_inputs.append(self.values[i] * w)
             s = agg_func(node_inputs)
-            self.values[node] = act_func(bias + response * s) #HOTFIX: 消す!!
 
-            if( not modulatory):
-                self.values[node] = act_func(bias + response * s)
-                self.modulate_values[node] = 0.0
-            elif (modulatory):
-                self.values[node] = 0.0
-                self.modulate_values[node] = act_func(bias + response * s)
+            assert modulatory_ratio >= 0.0 and modulatory_ratio <= 1.0, "ERROR:modulatory_ratio must be between 0.0 and 1.0"
+            self.values[node] = act_func(bias + response * s) * (1.0 - modulatory_ratio)
+            self.modulate_values[node] = act_func(bias + response * s) * modulatory_ratio
 
         # Caliculate modulated_values of each node
-        for node, modulatory, act_func, agg_func, bias, response, links in self.node_evals:
+        for node, modulatory_ratio, act_func, agg_func, bias, response, links in self.node_evals:
             self.modulated_values[node] = self.global_params['m_d']
             for i, w in links:
                 self.modulated_values[node] += self.modulate_values[i] * w
 
         if(is_update):
-            for node, modulatory, act_func, agg_func, bias, response, links in self.node_evals:
+            for node, modulatory_ratio, act_func, agg_func, bias, response, links in self.node_evals:
                 for i, w in links:
                     #Soltoggioの設定に基づいて重みを更新
                     update_val = math.tanh (self.modulated_values[node] / 2.0) * \
@@ -89,7 +85,7 @@ class ModExHebbFFN(object):
                 ng = genome.nodes[node]
                 aggregation_function = config.genome_config.aggregation_function_defs.get(ng.aggregation)
                 activation_function = config.genome_config.activation_defs.get(ng.activation)
-                node_evals.append((node, ng.modulatory, activation_function, aggregation_function, ng.bias, ng.response, inputs))
+                node_evals.append((node, ng.modulatory_ratio, activation_function, aggregation_function, ng.bias, ng.response, inputs))
 
         global_params = genome.global_params[0].__dict__
 
