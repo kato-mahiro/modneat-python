@@ -79,7 +79,7 @@ class Checkpointer(BaseReporter):
         list_of_genome = list(population.values())
         list_of_genome = sorted(list_of_genome, key=attrgetter('fitness'))
         best_genome = list_of_genome[-1]
-        visualize.draw_net(config, best_genome, directory=self.savedir+'/checkpoints', filename='best_{0}'.format(generation), show_disabled=False)
+        visualize.draw_net(config, best_genome, directory=self.savedir+'/bests', filename='best_{0}'.format(generation), show_disabled=False)
 
         visualize.plot_stats(self.stats, ylog=False, view=False, filename=os.path.join(self.savedir, 'avg_fitness.png'))
         visualize.plot_species(self.stats, view=False, filename=os.path.join(self.savedir, 'speciation.png'))
