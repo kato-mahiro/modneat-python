@@ -133,15 +133,13 @@ class ModNodeGene(DefaultNodeGene):
                         FloatAttribute('response'),
                         StringAttribute('activation', options='sigmoid'),
                         StringAttribute('aggregation', options='sum'),
-                        BoolAttribute('modulatory', default='false')]
+                        FloatAttribute('modulatory_ratio', max_value=1.0, min_value=0.0)]
 
     def distance(self, other, config):
-        d = abs(self.bias - other.bias) + abs(self.response - other.response)
+        d = abs(self.bias - other.bias) + abs(self.response - other.response) + abs(self.modulatory_ratio - other.modulatory_ratio)
         if self.activation != other.activation:
             d += 1.0
         if self.aggregation != other.aggregation:
-            d += 1.0
-        if self.modulatory != other.modulatory:
             d += 1.0
         return d * config.compatibility_weight_coefficient
 
