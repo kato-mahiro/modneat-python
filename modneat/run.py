@@ -30,14 +30,6 @@ def run_experiment(config_file, num_workers):
         config_file: the path to the file with experiment configuration
     """
 
-    # Save experiment settings
-    shutil.copyfile(CONFIG_PATH, out_dir + '/settings/config.ini')
-    shutil.copyfile('./task.py', out_dir + '/settings/task.py')
-    with open(out_dir + "/description.txt", "w") as file:
-        file.write(args.description)
-    with open(out_dir + "/settings/command", "w") as file:
-        file.write('COMMAND: ' + exec_command + '\n')
-        file.write('ARGS: ' + str(args).replace(",", "\n"))
 
     # Load configuration.
     config = modneat.Config(GENOME_TYPE, modneat.DefaultReproduction,
@@ -118,6 +110,15 @@ if __name__ == '__main__':
 
     # Clean results of previous run if any or init the ouput directory
     clean_output()
+
+    # Save experiment settings
+    shutil.copyfile(CONFIG_PATH, out_dir + '/settings/config.ini')
+    shutil.copyfile('./task.py', out_dir + '/settings/task.py')
+    with open(out_dir + "/description.txt", "w") as file:
+        file.write(args.description)
+    with open(out_dir + "/settings/command", "w") as file:
+        file.write('COMMAND: ' + exec_command + '\n')
+        file.write('ARGS: ' + str(args).replace(",", "\n"))
 
     # Run the experiment
     run_experiment(CONFIG_PATH, NUM_WORKERS)
