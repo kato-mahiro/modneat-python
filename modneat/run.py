@@ -1,3 +1,4 @@
+from datetime import datetime
 import argparse
 import sys
 import os
@@ -108,6 +109,10 @@ if __name__ == '__main__':
         out_dir = os.path.join(local_dir, args.savedir, args.task + '_' + args.network + '_' + str(args.run_id))
     else:
         out_dir = os.path.join(local_dir, args.savedir, '[CONTINUED]' + args.task + '_' + args.network + '_' + str(args.run_id))
+    
+    now = datetime.now()
+    datestring = now.strftime("%Y%m%d%H%M%S")
+    out_dir = out_dir + '-' + datestring
 
     # Clean results of previous run if any or init the ouput directory
     clean_output()
