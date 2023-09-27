@@ -82,10 +82,13 @@ class test_learning:
     #学習能力が適切に機能しているか、進化するかを検証するためのタスク
     def __init__(self, network_type):
         self.network_type = network_type
-        self.initial_target = random.uniform(-0.5, 0.5)
+    
+    def reset_task(self):
+        self.initial_target = random.uniform(0.2, 0.7)
         self.target = self.initial_target
-        self.rate_of_change = random.uniform(-0.2, 0.2)
+        self.rate_of_change = random.uniform(0.2, 0.2)
         self.clamp_max, self.clamp_min = 1.0, -1.0
+        self.fitness = 0.0
 
     def eval_fitness(self, net):
         """
@@ -99,16 +102,13 @@ class test_learning:
         history.append(copy.deepcopy(net.__dict__))
         fitness_list = []
         for trial_n in range(10):
+            self.reset_task()
             net.reset()
-            self.initial_target = random.uniform(-0.5, 0.5)
-            self.target = self.initial_target
-            self.rate_of_change = random.uniform(-0, 0)
-            fitness = 0.0
             for step_n in range(10):
                 output = net.activate([1.0, 0.0], is_update=False) #activate_input, previous_output, feedback_input
                 diff = output[0] - self.target
-                fitness -= abs(diff)
-                net.activate([1.0, diff], is_update=True)
+                self.fitness -= abs(diff)
+                net.activate([0.0, diff], is_update=True)
                 history.append(copy.deepcopy(net.__dict__))
 
                 self.target += self.rate_of_change
@@ -118,9 +118,9 @@ class test_learning:
                 elif(self.target < self.clamp_min):
                     self.target = self.clamp_min
                     self.rate_of_change *= -1.0
-            fitness_list.append(fitness)
+            fitness_list.append(self.fitness)
 
-        return sum(fitness_list)/10, history
+        return min(fitness_list), history
 
     def eval_genomes(self, genomes, config):
         """

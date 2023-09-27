@@ -1,3 +1,4 @@
+from datetime import datetime
 import argparse
 import sys
 import os
@@ -7,19 +8,9 @@ import shutil
 import modneat
 from modneat import parallel
 
-# The current working directory
-local_dir = os.getcwd()
-sys.path.append(local_dir)
-try:
-    import task
-except:
-    print("Error: task.py not found in current directory.")
-    sys.exit()
-       
-
 def create_parser():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--network', type=str, help='', default='ModExHebbFFN')
+    parser.add_argument('--network', type=str, help='testdoc', default='ModExHebbFFN')
     parser.add_argument('--config', type=str, help='', default='./configs/modexhebb_genome.ini')
     parser.add_argument('--checkpoint_interval', type=int, help='', default=100)
     parser.add_argument('--checkpoint_load', type=str, help='', default='')
@@ -28,6 +19,7 @@ def create_parser():
     parser.add_argument('--generation', type=int, help='', default=100)
     parser.add_argument('--run_id', type=int, help='', default=0)
     parser.add_argument('--num_workers', type=int, help='', default=0)
+    parser.add_argument('--description', type=str, help='description of an experiment', default='No description')
 
     args = parser.parse_args()
     return args
@@ -37,6 +29,13 @@ def run_experiment(config_file, num_workers):
     Arguments:
         config_file: the path to the file with experiment configuration
     """
+
+    # Save experiment settings
+    shutil.copyfile(CONFIG_PATH, out_dir + '/settings/config.ini')
+    shutil.copyfile('./task.py', out_dir + '/settings/task.py')
+    with open(out_dir + "/settings/command", "w") as file:
+        file.write('COMMAND: ' + exec_command + '\n')
+        file.write('ARGS: ' + str(args).replace(",", "\n"))
 
     # Load configuration.
     config = modneat.Config(GENOME_TYPE, modneat.DefaultReproduction,
@@ -51,7 +50,7 @@ def run_experiment(config_file, num_workers):
 
     # Add a stdout reporter to show progress in the terminal.
     p.add_reporter(modneat.StdOutReporter(True))
-    p.add_reporter(modneat.FileOutReporter(True, out_dir + '/resuots.txt'))
+    p.add_reporter(modneat.FileOutReporter(True, out_dir + '/results.txt'))
     stats = modneat.StatisticsReporter()
     p.add_reporter(stats)
     p.add_reporter(modneat.Checkpointer(savedir=out_dir, stats=stats, generation_interval=CHECKPOINT_INTERVAL,\
@@ -79,11 +78,23 @@ def clean_output():
     # create the output directory
     os.makedirs(out_dir, exist_ok=False)
     os.makedirs(out_dir + '/checkpoints', exist_ok=False)
+    os.makedirs(out_dir + '/settings', exist_ok=False)
 
 
 if __name__ == '__main__':
+    exec_command = ' '.join(sys.argv)
     # Get args
     args = create_parser()
+
+    # Load task module from current working directory
+    local_dir = os.getcwd()
+    sys.path.append(local_dir)
+    try:
+        import task
+    except:
+        print("Error: task.py not found in current directory.")
+        sys.exit()
+
     NETWORK_TYPE = eval('modneat.nn.' + args.network)
     GENOME_TYPE = NETWORK_TYPE.genome_type()
     TASK = eval('task.' + args.task + '(network_type = NETWORK_TYPE)')
@@ -98,6 +109,10 @@ if __name__ == '__main__':
         out_dir = os.path.join(local_dir, args.savedir, args.task + '_' + args.network + '_' + str(args.run_id))
     else:
         out_dir = os.path.join(local_dir, args.savedir, '[CONTINUED]' + args.task + '_' + args.network + '_' + str(args.run_id))
+    
+    now = datetime.now()
+    datestring = now.strftime("%Y%m%d%H%M%S")
+    out_dir = out_dir + '-' + datestring
 
     # Clean results of previous run if any or init the ouput directory
     clean_output()
