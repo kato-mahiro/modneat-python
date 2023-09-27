@@ -33,6 +33,8 @@ def run_experiment(config_file, num_workers):
     # Save experiment settings
     shutil.copyfile(CONFIG_PATH, out_dir + '/settings/config.ini')
     shutil.copyfile('./task.py', out_dir + '/settings/task.py')
+    with open(out_dir + "/description.txt", "w") as file:
+        file.write(args.description)
     with open(out_dir + "/settings/command", "w") as file:
         file.write('COMMAND: ' + exec_command + '\n')
         file.write('ARGS: ' + str(args).replace(",", "\n"))
@@ -111,7 +113,7 @@ if __name__ == '__main__':
         out_dir = os.path.join(local_dir, args.savedir, '[CONTINUED]' + args.task + '_' + args.network + '_' + str(args.run_id))
     
     now = datetime.now()
-    datestring = now.strftime("%Y%m%d%H%M%S")
+    datestring = now.strftime("%Y%m%d-%H%M%S")
     out_dir = out_dir + '-' + datestring
 
     # Clean results of previous run if any or init the ouput directory
