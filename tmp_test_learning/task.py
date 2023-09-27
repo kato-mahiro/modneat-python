@@ -84,9 +84,9 @@ class test_learning:
         self.network_type = network_type
     
     def reset_task(self):
-        self.initial_target = random.uniform(0.5, 0.5)
+        self.initial_target = random.uniform(0.2, 0.7)
         self.target = self.initial_target
-        self.rate_of_change = random.uniform(0.3, -0.3)
+        self.rate_of_change = random.uniform(0.2, 0.2)
         self.clamp_max, self.clamp_min = 1.0, -1.0
         self.fitness = 0.0
 
@@ -120,7 +120,7 @@ class test_learning:
                     self.rate_of_change *= -1.0
             fitness_list.append(self.fitness)
 
-        return sum(fitness_list)/10, history
+        return min(fitness_list), history
 
     def eval_genomes(self, genomes, config):
         """
