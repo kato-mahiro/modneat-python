@@ -12,7 +12,8 @@ setup(
     description='A Modulatory NEAT (NeuroEvolution of Augmenting Topologies) implementation',
     long_description='Python implementation of NEAT (NeuroEvolution of Augmenting Topologies), a method ' +
                      'developed by Kenneth O. Stanley for evolving arbitrary neural networks.',
-    packages=['modneat', 'modneat/iznn', 'modneat/nn', 'modneat/ctrnn', 'modneat/report_utils'],
+    packages=['modneat', 'modneat/iznn', 'modneat/nn', 'modneat/ctrnn'],
+    include_package_data=True,
     classifiers=[
         'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
