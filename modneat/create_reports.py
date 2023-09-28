@@ -2,6 +2,7 @@
 import sys
 import os
 import argparse
+import shutil
 
 def create_parser():
     parser = argparse.ArgumentParser()
@@ -32,3 +33,5 @@ if __name__=='__main__':
     ipynb_files = [f for f in os.listdir(notebook_dir) if f.endswith('.ipynb')]
     print("notebook_dir: ", notebook_dir)
     print(ipynb_files)
+    for ipynb_file in ipynb_files:
+        shutil.copy(notebook_dir + '/' + ipynb_file, target_path + '/reports/')
