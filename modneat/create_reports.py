@@ -32,6 +32,6 @@ if __name__=='__main__':
     notebook_dir = os.path.dirname(os.path.abspath(__file__)) + '/report_utils'
     ipynb_files = [f for f in os.listdir(notebook_dir) if f.endswith('.ipynb')]
     print("notebook_dir: ", notebook_dir)
-    print(ipynb_files)
     for ipynb_file in ipynb_files:
         shutil.copy(notebook_dir + '/' + ipynb_file, target_path + '/reports/')
+        print('create ' + target_path + '/reports/' + ipynb_file)
