@@ -12,7 +12,6 @@ def load_experiment_settings(path_of_command_file:str) -> dict:
     experiment_settings = {}
     for key, value in tmp_dict.items():
         after = re.findall(r'["\'](.*?)["\']', value)
-        print(after)
         if(len(after) == 0):
             experiment_settings[key] = value
         else:
