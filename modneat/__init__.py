@@ -3,6 +3,8 @@ import modneat.nn as nn
 import modneat.ctrnn as ctrnn
 import modneat.iznn as iznn
 import modneat.distributed as distributed
+import modneat.report_utils as report_utils
+import modneat.report_utils.report_funcs as report_funcs
 
 from modneat.config import Config
 from modneat.population import Population, CompleteExtinctionException
