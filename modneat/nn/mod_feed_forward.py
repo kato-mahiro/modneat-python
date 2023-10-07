@@ -5,7 +5,7 @@ from modneat.genome import ExHebbGenome, ModExHebbGenome
 from modneat.nn.utils import weight_change
 
 
-class ModExHebbFFN(object):
+class ModFeedForward(object):
     def __init__(self, inputs, outputs, node_evals, global_params):
         self.input_nodes = inputs
         self.output_nodes = outputs

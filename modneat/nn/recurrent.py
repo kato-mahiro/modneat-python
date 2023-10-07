@@ -1,7 +1,7 @@
 from modneat.graphs import required_for_output
 
 
-class RecurrentNetwork(object):
+class Recurrent(object):
     def __init__(self, inputs, outputs, node_evals):
         self.input_nodes = inputs
         self.output_nodes = outputs
