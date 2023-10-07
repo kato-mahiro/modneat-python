@@ -2,15 +2,12 @@ import copy
 import math
 from modneat.graphs import feed_forward_layers
 from modneat.genome import ExHebbGenome, ModExHebbGenome
+from modneat.nn import FeedForward
 from modneat.nn.utils import weight_change
 
-
-class ModFeedForward(object):
+class ModFeedForward(FeedForward):
     def __init__(self, inputs, outputs, node_evals, global_params):
-        self.input_nodes = inputs
-        self.output_nodes = outputs
-        self.node_evals = node_evals
-        self.original_node_evals = copy.deepcopy(self.node_evals)
+        super().__init__(inputs, outputs, node_evals)
         self.values = dict((key, 0.0) for key in inputs + outputs)
         self.modulate_values = dict((key, 0.0) for key in inputs + outputs)
         self.modulated_values = dict((key, 0.0) for key in inputs + outputs)
@@ -20,8 +17,9 @@ class ModFeedForward(object):
     def genome_type():
         return ModExHebbGenome
 
-    def reset(self):
-        self.node_evals = copy.deepcopy(self.original_node_evals)
+    def assert_type(self):
+        #a, b, c, d, etaをglobalに設定するか、localに設定するかに関するassrsion
+        pass
 
     def activate(self, inputs, is_update = True):
         if len(self.input_nodes) != len(inputs):
@@ -89,4 +87,4 @@ class ModFeedForward(object):
 
         global_params = genome.global_params[0].__dict__
 
-        return ModExHebbFFN(config.genome_config.input_keys, config.genome_config.output_keys, node_evals, global_params)
+        return ModFeedForward(config.genome_config.input_keys, config.genome_config.output_keys, node_evals, global_params)
