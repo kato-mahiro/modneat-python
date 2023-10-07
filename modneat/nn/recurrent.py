@@ -1,5 +1,5 @@
 from modneat.graphs import required_for_output
-
+from modneat.genome import DefaultGenome
 
 class Recurrent(object):
     def __init__(self, inputs, outputs, node_evals):
@@ -17,6 +17,10 @@ class Recurrent(object):
                 for i, w in links:
                     v[i] = 0.0
         self.active = 0
+
+    @staticmethod
+    def genome_type():
+        return DefaultGenome
 
     def reset(self):
         self.values = [dict((k, 0.0) for k in v) for v in self.values]
