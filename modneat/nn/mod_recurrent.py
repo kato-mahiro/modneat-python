@@ -4,7 +4,7 @@ from modneat.graphs import required_for_output
 from modneat.genome import ModExHebbGenome
 from modneat.nn.utils import weight_change
 
-class ModExHebbRNN(object):
+class ModRecurrent(object):
     def __init__(self, inputs, outputs, node_evals, global_params):
         self.input_nodes = inputs
         self.output_nodes = outputs

@@ -1,7 +1,7 @@
 from modneat.graphs import feed_forward_layers
 from modneat.genome import DefaultGenome
 
-class FeedForwardNetwork(object):
+class FeedForward(object):
     def __init__(self, inputs, outputs, node_evals):
         self.input_nodes = inputs
         self.output_nodes = outputs
