@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='modneat-python',
-    version='0.1.0',
+    version='0.1.1',
     author='kato-mahiro, cesar.gomes, mirrorballu2',
     author_email='katomasahiro10@gmail.com',
     maintainer='kato-mahiro',
