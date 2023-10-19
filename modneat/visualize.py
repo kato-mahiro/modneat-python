@@ -149,24 +149,19 @@ def draw_net(config, genome, view=False, filename=None, directory=None, node_nam
             continue
 
         try:
-            if(genome.nodes[n].modulatory_ratio>0.5):
+            if(genome.nodes[n].modulatory):
                 attrs = {'style': 'filled',
                         'shape': 'box',
-                        'fillcolor': node_colors.get(n, 'white'),
-                        'label': f'{n} \n {genome.nodes[n].modulatory_ratio:.2}'
-                }
+                        'fillcolor': node_colors.get(n, 'white')}
             else:
                 attrs = {'style': 'filled',
                         'shape': 'circle',
-                        'fillcolor': node_colors.get(n, 'white'),
-                        'label': f'{n} \n {genome.nodes[n].modulatory_ratio:.2}'
-                }
+                        'fillcolor': node_colors.get(n, 'white')}
         except:
             attrs = {'style': 'filled',
                     'shape': 'circle',
-                    'fillcolor': node_colors.get(n, 'white'),
-                    'label': f'{n}'
-            }
+                    'fillcolor': node_colors.get(n, 'white')}
+
 
         dot.node(str(n), _attributes=attrs)
 
