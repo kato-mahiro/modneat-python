@@ -10,7 +10,7 @@ from modneat import parallel
 
 def create_parser():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--network', type=str, help='testdoc', default='ModExHebbFFN')
+    parser.add_argument('--network', type=str, help='testdoc', default='ModFeedForward')
     parser.add_argument('--config', type=str, help='', default='./configs/modexhebb_genome.ini')
     parser.add_argument('--checkpoint_interval', type=int, help='', default=100)
     parser.add_argument('--checkpoint_load', type=str, help='', default='')
