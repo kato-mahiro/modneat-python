@@ -131,7 +131,9 @@ class Config(object):
                 ConfigParameter('fitness_criterion', str),
                 ConfigParameter('fitness_threshold', float),
                 ConfigParameter('reset_on_extinction', bool),
-                ConfigParameter('no_fitness_termination', bool, False)]
+                ConfigParameter('no_fitness_termination', bool, False),
+                ConfigParameter('boolian_modulation', bool, False)
+                ]
 
     def __init__(self, genome_type, reproduction_type, species_set_type, stagnation_type, filename):
         # Check that the provided types have the required methods.

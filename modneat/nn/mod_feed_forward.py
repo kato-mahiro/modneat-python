@@ -6,12 +6,13 @@ from modneat.nn import FeedForward
 from modneat.nn.utils import weight_change
 
 class ModFeedForward(FeedForward):
-    def __init__(self, inputs, outputs, node_evals, global_params):
+    def __init__(self, inputs, outputs, node_evals, global_params, boolian_modulation):
         super().__init__(inputs, outputs, node_evals)
         self.values = dict((key, 0.0) for key in inputs + outputs)
         self.modulate_values = dict((key, 0.0) for key in inputs + outputs)
         self.modulated_values = dict((key, 0.0) for key in inputs + outputs)
         self.global_params = global_params
+        self.boolian_modulation = boolian_modulation
     
     @staticmethod
     def genome_type():
@@ -35,8 +36,17 @@ class ModFeedForward(FeedForward):
             s = agg_func(node_inputs)
 
             assert modulatory_ratio >= 0.0 and modulatory_ratio <= 1.0, "ERROR:modulatory_ratio must be between 0.0 and 1.0"
-            self.values[node] = act_func(bias + response * s) * (1.0 - modulatory_ratio)
-            self.modulate_values[node] = act_func(bias + response * s) * modulatory_ratio
+
+            if(self.boolian_modulation):
+                if(modulatory_ratio > 0.5):
+                    self.values[node] = 0.0
+                    self.modulate_values[node] = act_func(bias + response * s)
+                else:
+                    self.values[node] = act_func(bias + response * s)
+                    self.modulate_values[node] = 0.0
+            else:
+                self.values[node] = act_func(bias + response * s) * (1.0 - modulatory_ratio)
+                self.modulate_values[node] = act_func(bias + response * s) * modulatory_ratio
 
         # Caliculate modulated_values of each node
         for node, modulatory_ratio, act_func, agg_func, bias, response, links in self.node_evals:
@@ -87,4 +97,4 @@ class ModFeedForward(FeedForward):
 
         global_params = genome.global_params[0].__dict__
 
-        return ModFeedForward(config.genome_config.input_keys, config.genome_config.output_keys, node_evals, global_params)
+        return ModFeedForward(config.genome_config.input_keys, config.genome_config.output_keys, node_evals, global_params, config.boolian_modulation)
