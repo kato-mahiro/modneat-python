@@ -1,22 +1,23 @@
 import copy
 import math
 from modneat.graphs import feed_forward_layers
-from modneat.genome import ExHebbGenome, ModExHebbGenome
+from modneat.genome import ModGenome
 from modneat.nn import FeedForward
 from modneat.nn.utils import weight_change
 
 class ModFeedForward(FeedForward):
-    def __init__(self, inputs, outputs, node_evals, global_params, boolian_modulation):
+    def __init__(self, inputs, outputs, node_evals, global_params, boolian_modulation, evoparam_mode):
         super().__init__(inputs, outputs, node_evals)
         self.values = dict((key, 0.0) for key in inputs + outputs)
         self.modulate_values = dict((key, 0.0) for key in inputs + outputs)
         self.modulated_values = dict((key, 0.0) for key in inputs + outputs)
         self.global_params = global_params
         self.boolian_modulation = boolian_modulation
+        self.evoparam_mode = evoparam_mode
     
     @staticmethod
     def genome_type():
-        return ModExHebbGenome
+        return ModGenome
 
     def assert_type(self):
         #a, b, c, d, etaをglobalに設定するか、localに設定するかに関するassrsion
@@ -31,7 +32,7 @@ class ModFeedForward(FeedForward):
 
         for node, modulatory_ratio, act_func, agg_func, bias, response, links in self.node_evals:
             node_inputs = []
-            for i, w in links:
+            for i, w, a, b, c, d in links:
                 node_inputs.append(self.values[i] * w)
             s = agg_func(node_inputs)
 
@@ -50,21 +51,23 @@ class ModFeedForward(FeedForward):
 
         # Caliculate modulated_values of each node
         for node, modulatory_ratio, act_func, agg_func, bias, response, links in self.node_evals:
-            self.modulated_values[node] = self.global_params['m_d']
-            for i, w in links:
+            self.modulated_values[node] = self.global_params['m_d'] #TODO m_dがローカルの場合の処理
+            for i, w, a, b, c, d in links:
                 self.modulated_values[node] += self.modulate_values[i] * w
 
         if(is_update):
             for node, modulatory_ratio, act_func, agg_func, bias, response, links in self.node_evals:
-                for i, w in links:
+                for i, w, a, b, c, d in links:
+                    if(self.evoparam_mode == 'global'):
+                        a, b, c, d, eta = self.global_params['a'], self.global_params['b'], self.global_params['c'], self.global_params['d'], self.global_params['eta']
                     #Soltoggioの設定に基づいて重みを更新
                     update_val = math.tanh (self.modulated_values[node] / 2.0) * \
-                                self.global_params['eta'] * \
+                                eta * \
                                 (
-                                    self.global_params['a'] * self.values[i] * self.values[node] + \
-                                    self.global_params['b'] * self.values[i] + \
-                                    self.global_params['c'] * self.values[node] + \
-                                    self.global_params['d'] \
+                                    a * self.values[i] * self.values[node] + \
+                                    b * self.values[i] + \
+                                    c * self.values[node] + \
+                                    d \
                                 )
                     weight_change(self, i, node, update_val)
 
@@ -87,7 +90,7 @@ class ModFeedForward(FeedForward):
                     inode, onode = conn_key
                     if onode == node:
                         cg = genome.connections[conn_key]
-                        inputs.append((inode, cg.weight))
+                        inputs.append((inode, cg.weight, cg.a, cg.b, cg.c, cg.d)) #TODO etaも!
                         node_expr.append("v[{}] * {:.7e}".format(inode, cg.weight))
 
                 ng = genome.nodes[node]
@@ -97,4 +100,4 @@ class ModFeedForward(FeedForward):
 
         global_params = genome.global_params[0].__dict__
 
-        return ModFeedForward(config.genome_config.input_keys, config.genome_config.output_keys, node_evals, global_params, config.boolian_modulation)
+        return ModFeedForward(config.genome_config.input_keys, config.genome_config.output_keys, node_evals, global_params, config.boolian_modulation, config.evoparam_mode)

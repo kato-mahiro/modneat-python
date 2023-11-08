@@ -606,8 +606,8 @@ class ModGenome(DefaultGenome):
     @classmethod
     def parse_config(cls, param_dict):
         param_dict['node_gene_type'] = ModNodeGene
-        param_dict['connection_gene_type'] = DefaultConnectionGene
-        param_dict['global_gene_type'] = DefaultGlobalGene
+        param_dict['connection_gene_type'] = ExHebbConnectionGene
+        param_dict['global_gene_type'] = ExHebbGlobalGene
         return DefaultGenomeConfig(param_dict)
         
 class IndExHebbGenome(DefaultGenome):

@@ -132,7 +132,8 @@ class Config(object):
                 ConfigParameter('fitness_threshold', float),
                 ConfigParameter('reset_on_extinction', bool),
                 ConfigParameter('no_fitness_termination', bool, False),
-                ConfigParameter('boolian_modulation', bool, False)
+                ConfigParameter('boolian_modulation', bool, False),
+                ConfigParameter('evoparam_mode', str, 'global') # global or local
                 ]
 
     def __init__(self, genome_type, reproduction_type, species_set_type, stagnation_type, filename):
