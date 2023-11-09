@@ -184,5 +184,5 @@ class ExHebbConnectionGene(DefaultConnectionGene):
             d2 += 1.0
 
         return (d * config.compatibility_weight_coefficient + \
-                d2 * config.compatibility_evoparam_coefficient) \
+                d2 * config.compatibility_local_param_coefficient) \
                 / 2.0
