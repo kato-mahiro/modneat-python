@@ -168,10 +168,12 @@ class DefaultConnectionGene(BaseGene):
 class ExHebbConnectionGene(DefaultConnectionGene):
     _gene_attributes = [FloatAttribute('weight'),
                         BoolAttribute('enabled'),
+                        FloatAttribute('eta', init_mean = 0.0, init_stdev = 1.0),
                         FloatAttribute('a', init_mean = 0.0, init_stdev = 1.0),
                         FloatAttribute('b', init_mean = 0.0, init_stdev = 1.0),
                         FloatAttribute('c', init_mean = 0.0, init_stdev = 1.0),
-                        FloatAttribute('d', init_mean = 0.0, init_stdev = 1.0)]
+                        FloatAttribute('d', init_mean = 0.0, init_stdev = 1.0),
+                        FloatAttribute('m_d', init_mean = 0.0, init_stdev = 1.0)]
 
     def distance(self, other, config):
         d = abs(self.weight - other.weight)

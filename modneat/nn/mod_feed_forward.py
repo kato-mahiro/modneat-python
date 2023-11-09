@@ -32,7 +32,7 @@ class ModFeedForward(FeedForward):
 
         for node, modulatory_ratio, act_func, agg_func, bias, response, links in self.node_evals:
             node_inputs = []
-            for i, w, a, b, c, d in links:
+            for i, w, eta, a, b, c, d, m_d in links:
                 node_inputs.append(self.values[i] * w)
             s = agg_func(node_inputs)
 
@@ -53,13 +53,17 @@ class ModFeedForward(FeedForward):
 
         # Caliculate modulated_values of each node
         for node, modulatory_ratio, act_func, agg_func, bias, response, links in self.node_evals:
-            self.modulated_values[node] = self.global_params['m_d'] #TODO m_dがローカルの場合の処理
-            for i, w, a, b, c, d in links:
+            self.modulated_values[node] = 0.0
+            for i, w, eta, a, b, c, d, m_d in links:
                 self.modulated_values[node] += self.modulate_values[i] * w
+            if(self.evoparam_mode == 'global'):
+                self.modulated_values[node] += self.global_params['m_d']
+            elif(self.evoparam_mode == 'local'):
+                self.modulated_values[node] += m_d
 
         if(is_update):
             for node, modulatory_ratio, act_func, agg_func, bias, response, links in self.node_evals:
-                for i, w, a, b, c, d in links:
+                for i, w, eta, a, b, c, d, m_d in links:
                     if(self.evoparam_mode == 'global'):
                         a, b, c, d, eta = self.global_params['a'], self.global_params['b'], self.global_params['c'], self.global_params['d'], self.global_params['eta']
                     #Soltoggioの設定に基づいて重みを更新
@@ -92,7 +96,7 @@ class ModFeedForward(FeedForward):
                     inode, onode = conn_key
                     if onode == node:
                         cg = genome.connections[conn_key]
-                        inputs.append((inode, cg.weight, cg.a, cg.b, cg.c, cg.d)) #TODO etaも!
+                        inputs.append((inode, cg.weight, cg.eta, cg.a, cg.b, cg.c, cg.d, cg.m_d))
                         node_expr.append("v[{}] * {:.7e}".format(inode, cg.weight))
 
                 ng = genome.nodes[node]
