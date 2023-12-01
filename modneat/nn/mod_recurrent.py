@@ -1,7 +1,7 @@
 import copy
 import math
 from modneat.graphs import required_for_output
-from modneat.genome import ModExHebbGenome
+from modneat.genome import ModGenome
 from modneat.nn.utils import weight_change
 
 class ModRecurrent(object):

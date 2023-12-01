@@ -8,7 +8,7 @@ import modneat.report_utils.report_funcs as report_funcs
 
 from modneat.config import Config
 from modneat.population import Population, CompleteExtinctionException
-from modneat.genome import DefaultGenome, ModGenome, IndExHebbGenome, ModIndExHebbGenome, ExampleGlobalGenome, ModExHebbGenome
+from modneat.genome import DefaultGenome, ModGenome, ExampleGlobalGenome
 from modneat.reproduction import DefaultReproduction
 from modneat.stagnation import DefaultStagnation
 from modneat.reporting import StdOutReporter

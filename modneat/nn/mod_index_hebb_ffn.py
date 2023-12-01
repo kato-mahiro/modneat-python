@@ -1,7 +1,7 @@
 import copy
 import math
 from modneat.graphs import feed_forward_layers
-from modneat.genome import ModIndExHebbGenome
+#from modneat.genome import ModIndExHebbGenome
 from modneat.nn.utils import weight_change
 
 def sigmoid(a):
