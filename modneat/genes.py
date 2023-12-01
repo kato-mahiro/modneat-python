@@ -98,13 +98,7 @@ class ExHebbGlobalGene(DefaultGlobalGene):
                         ]
 
     def distance(self, other, config):
-        d = abs(self.eta - other.eta) + \
-            abs(self.a - other.a) + \
-            abs(self.b - other.b) + \
-            abs(self.c - other.c) + \
-            abs(self.d - other.d) + \
-            abs(self.m_d - other.m_d)
-
+        d = (abs(self.eta - other.eta) +  abs(self.a - other.a) +  abs(self.b - other.b) +  abs(self.c - other.c) +  abs(self.d - other.d) +  abs(self.m_d - other.m_d) ) / 6.0
         return d * config.compatibility_global_param_coefficient
 
 # TODO: Should these be in the nn module?  iznn and ctrnn can have additional attributes.
@@ -177,12 +171,11 @@ class ExHebbConnectionGene(DefaultConnectionGene):
 
     def distance(self, other, config):
         d = abs(self.weight - other.weight)
+        d2 = ( abs(self.a - other.a) + abs(self.b - other.b) + abs(self.c - other.c) + abs(self.d - other.d) + abs(self.eta - other.eta) + abs(self.m_d - other.m_d) ) / 6.0
 
-        d2 = (abs(self.a - other.a) + abs(self.b - other.b) + abs(self.c - other.c) + abs(self.d - other.d)) / 4
         if self.enabled != other.enabled:
             d += 1.0
             d2 += 1.0
 
         return (d * config.compatibility_weight_coefficient + \
-                d2 * config.compatibility_local_param_coefficient) \
-                / 2.0
+                d2 * config.compatibility_local_param_coefficient)
