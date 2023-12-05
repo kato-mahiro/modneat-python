@@ -3,7 +3,7 @@ name: dev CI
 on:
   push:
     branches: 
-      - develop/ci
+      - develop_ci
 
 jobs:
   tests:
