@@ -29,15 +29,15 @@ jobs:
 
       - name: Run testcase 01
         run: python -m modneat.run --task xor --config ./configs/bool_global.ini
-        working_directory: ./tests
+        working-directory: ./tests
         continue-on-error: true
 
       - name: Run testcase 02
         run: python -m modneat.run --task xor --config ./configs/float_local.ini
-        working_directory: ./tests
+        working-directory: ./tests
         continue-on-error: true
 
       - name: Run testcase 03 (Multi-Core)
         run: python -m modneat.run --task xor --config ./configs/float_local.ini --num_workers 2
-        working_directory: ./tests
+        working-directory: ./tests
         continue-on-error: true
