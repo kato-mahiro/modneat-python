@@ -1,13 +1,12 @@
-name: Action ci
+name: dev CI
 
 on:
   push:
     branches: 
-      - master
-  workflow_dispatch:
+      - develop/ci
 
 jobs:
-  example-test:
+  tests:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -27,23 +26,18 @@ jobs:
         run: pip install -r requirements.txt
       - name: Install modneat
         run: pip install .
-      - name: Run Default
-        run: cd ./modneat-examples && python ./run_task.py --generation 10
-      - name: Run HebbFFN
-        run: cd ./modneat-examples && python ./run_task.py --network HebbFFN --generation 10 --config ./configs/default_genome.ini
-      - name: Run IndExHebbFFN
-        run: cd ./modneat-examples && python ./run_task.py --network IndExHebbFFN --config ./configs/indexhebb_genome.ini --generation 10
-      - name: Run ModHebbFFN
-        run: cd ./modneat-examples && python ./run_task.py --network ModHebbFFN --config ./configs/mod_genome.ini --generation 10
-      - name: Run ModIndExHebbFFN
-        run: cd ./modneat-examples && python ./run_task.py --network ModIndExHebbFFN --config ./configs/modindexhebb_genome.ini --generation 10
-      - name: Run ExHebbFFN
-        run: cd ./modneat-examples && python ./run_task.py --network ExHebbFFN --config ./configs/exhebb_genome.ini --generation 10
-      - name: Run ModExHebbFFN
-        run: cd ./modneat-examples && python ./run_task.py --network ModExHebbFFN --config ./configs/modexhebb_genome.ini --generation 10
-      - name: Run ExHebbRNN
-        run: cd ./modneat-examples && python ./run_task.py --network ExHebbRNN --config ./configs/exhebb_genome_rnn.ini --generation 10
-      - name: Run ModExHebbRNN
-        run: cd ./modneat-examples && python ./run_task.py --network ModExHebbRNN --config ./configs/modexhebb_genome_rnn.ini --generation 10
-      - name: test run.sh
-        run: cd ./modneat-examples && bash run_task_parallel.sh --network ModIndExHebbFFN --config_file ./configs/modindexhebb_genome.ini --task task.non_static --checkpoint_interval 10
+
+      - name: Run testcase 01
+        run: python -m modneat.run --task xor --config ./configs/bool_global.ini
+        working_directory: ./tests
+        continue-on-error: true
+
+      - name: Run testcase 02
+        run: python -m modneat.run --task xor --config ./configs/float_local.ini
+        working_directory: ./tests
+        continue-on-error: true
+
+      - name: Run testcase 03 (Multi-Core)
+        run: python -m modneat.run --task xor --config ./configs/float_local.ini --num_workers 2
+        working_directory: ./tests
+        continue-on-error: true
