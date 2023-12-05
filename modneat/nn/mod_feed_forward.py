@@ -21,7 +21,11 @@ class ModFeedForward(FeedForward):
 
     def assert_type(self):
         #a, b, c, d, etaをglobalに設定するか、localに設定するかに関するassrsion
-        pass
+        if self.evoparam_mode == 'local':
+            self.config
+            pass
+        elif self.evoparam_mode == 'global':
+            pass
 
     def activate(self, inputs, is_update = True):
         if len(self.input_nodes) != len(inputs):
