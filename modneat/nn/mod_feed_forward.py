@@ -6,7 +6,7 @@ from modneat.nn import FeedForward
 from modneat.nn.utils import weight_change
 
 class ModFeedForward(FeedForward):
-    def __init__(self, inputs, outputs, node_evals, global_params, config)
+    def __init__(self, inputs, outputs, node_evals, global_params, config):
         super().__init__(inputs, outputs, node_evals)
         self.values = dict((key, 0.0) for key in inputs + outputs)
         self.modulate_values = dict((key, 0.0) for key in inputs + outputs)
