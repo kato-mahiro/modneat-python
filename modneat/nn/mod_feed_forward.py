@@ -6,14 +6,13 @@ from modneat.nn import FeedForward
 from modneat.nn.utils import weight_change
 
 class ModFeedForward(FeedForward):
-    def __init__(self, inputs, outputs, node_evals, global_params, modulatory_mode, evoparam_mode):
+    def __init__(self, inputs, outputs, node_evals, global_params, config)
         super().__init__(inputs, outputs, node_evals)
         self.values = dict((key, 0.0) for key in inputs + outputs)
         self.modulate_values = dict((key, 0.0) for key in inputs + outputs)
         self.modulated_values = dict((key, 0.0) for key in inputs + outputs)
         self.global_params = global_params
-        self.modulatory_mode = modulatory_mode
-        self.evoparam_mode = evoparam_mode
+        self.config = config
     
     @staticmethod
     def genome_type():
@@ -21,10 +20,9 @@ class ModFeedForward(FeedForward):
 
     def assert_type(self):
         #a, b, c, d, etaをglobalに設定するか、localに設定するかに関するassrsion
-        if self.evoparam_mode == 'local':
-            self.config
+        if self.config.evoparam_mode == 'local':
             pass
-        elif self.evoparam_mode == 'global':
+        elif self.config.evoparam_mode == 'global':
             pass
 
     def activate(self, inputs, is_update = True):
@@ -42,14 +40,14 @@ class ModFeedForward(FeedForward):
 
             assert modulatory_ratio >= 0.0 and modulatory_ratio <= 1.0, "ERROR:modulatory_ratio must be between 0.0 and 1.0"
 
-            if(self.modulatory_mode == 'bool'):
+            if(self.config.modulatory_mode == 'bool'):
                 if(modulatory_ratio > 0.5):
                     self.values[node] = 0.0
                     self.modulate_values[node] = act_func(bias + response * s)
                 else:
                     self.values[node] = act_func(bias + response * s)
                     self.modulate_values[node] = 0.0
-            elif(self.modulatory_mode == 'float'):
+            elif(self.config.modulatory_mode == 'float'):
                 self.values[node] = act_func(bias + response * s) * (1.0 - modulatory_ratio)
                 self.modulate_values[node] = act_func(bias + response * s) * modulatory_ratio
             else:
@@ -60,15 +58,15 @@ class ModFeedForward(FeedForward):
             self.modulated_values[node] = 0.0
             for i, w, eta, a, b, c, d, m_d in links:
                 self.modulated_values[node] += self.modulate_values[i] * w
-            if(self.evoparam_mode == 'global'):
+            if(self.config.evoparam_mode == 'global'):
                 self.modulated_values[node] += self.global_params['m_d']
-            elif(self.evoparam_mode == 'local'):
+            elif(self.config.evoparam_mode == 'local'):
                 self.modulated_values[node] += m_d
 
         if(is_update):
             for node, modulatory_ratio, act_func, agg_func, bias, response, links in self.node_evals:
                 for i, w, eta, a, b, c, d, m_d in links:
-                    if(self.evoparam_mode == 'global'):
+                    if(self.config.evoparam_mode == 'global'):
                         a, b, c, d, eta = self.global_params['a'], self.global_params['b'], self.global_params['c'], self.global_params['d'], self.global_params['eta']
                     #Soltoggioの設定に基づいて重みを更新
                     update_val = math.tanh (self.modulated_values[node] / 2.0) * \
@@ -110,4 +108,4 @@ class ModFeedForward(FeedForward):
 
         global_params = genome.global_params[0].__dict__
 
-        return ModFeedForward(config.genome_config.input_keys, config.genome_config.output_keys, node_evals, global_params, config.modulatory_mode, config.evoparam_mode)
+        return ModFeedForward(config.genome_config.input_keys, config.genome_config.output_keys, node_evals, global_params, config)
