@@ -13,6 +13,7 @@ class ModFeedForward(FeedForward):
         self.modulated_values = dict((key, 0.0) for key in inputs + outputs)
         self.global_params = global_params
         self.config = config
+        self.assert_type()
     
     @staticmethod
     def genome_type():
@@ -21,9 +22,9 @@ class ModFeedForward(FeedForward):
     def assert_type(self):
         #a, b, c, d, etaをglobalに設定するか、localに設定するかに関するassrsion
         if self.config.evoparam_mode == 'local':
-            pass
+            assert self.config.genome_config.compatibility_global_param_coefficient == 0.0, "ERROR:evoparam_mode is 'local', but compatibility_global_param_coefficient is not 0.0"
         elif self.config.evoparam_mode == 'global':
-            pass
+            assert self.config.genome_config.compatibility_local_param_coefficient == 0.0, "ERROR:evoparam_mode is 'global', but compatibility_local_param_coefficient is not 0.0"
 
     def activate(self, inputs, is_update = True):
         if len(self.input_nodes) != len(inputs):
